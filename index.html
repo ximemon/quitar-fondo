@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Quitar fondo</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f8;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .contenedor {
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+      padding: 70px 20px;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .subtitulo {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 40px;
+    }
+
+    .zona {
+      background: white;
+      border: 2px dashed #ccc;
+      border-radius: 20px;
+      padding: 70px 30px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      transition: 0.2s;
+    }
+
+    .zona.activa {
+      border-color: #222;
+      transform: scale(1.01);
+    }
+
+    .icono {
+      font-size: 55px;
+      margin-bottom: 20px;
+    }
+
+    .zona h2 {
+      margin: 0 0 10px;
+      font-size: 26px;
+    }
+
+    .zona p {
+      color: #777;
+      margin-bottom: 25px;
+    }
+
+    button {
+      background: #222;
+      color: white;
+      border: none;
+      padding: 14px 25px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #444;
+    }
+
+    #archivo {
+      display: none;
+    }
+
+    #preview {
+      margin-top: 35px;
+      max-width: 100%;
+      max-height: 450px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .mensaje {
+      margin-top: 30px;
+      color: #999;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="contenedor">
+
+    <h1>Quitar fondo</h1>
+
+    <div class="subtitulo">
+      Eliminá el fondo de tus imágenes de forma rápida.
+    </div>
+
+    <div class="zona" id="zona">
+
+      <div class="icono">🖼️</div>
+
+      <h2>Pegá una imagen</h2>
+
+      <p>
+        Copiá una imagen y presioná <strong>Ctrl + V</strong>
+        <br>
+        o arrastrala hasta acá.
+      </p>
+
+      <button onclick="document.getElementById('archivo').click()">
+        Elegir imagen
+      </button>
+
+      <input type="file" id="archivo" accept="image/*">
+
+    </div>
+
+    <img id="preview">
+
+    <div class="mensaje">
+      La imagen aparecerá aquí automáticamente.
+    </div>
+
+  </main>
+
+
+  <script>
+
+    const preview = document.getElementById("preview");
+    const archivo = document.getElementById("archivo");
+    const zona = document.getElementById("zona");
+
+
+    function mostrarImagen(file) {
+
+      if (!file || !file.type.startsWith("image/")) {
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = "inline-block";
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+
+    // PEGAR CON CTRL + V
+
+    document.addEventListener("paste", function(event) {
+
+      const items = event.clipboardData.items;
+
+      for (const item of items) {
+
+        if (item.type.startsWith("image/")) {
+
+          const file = item.getAsFile();
+
+          mostrarImagen(file);
+
+          break;
+        }
+      }
+    });
+
+
+    // ELEGIR ARCHIVO
+
+    archivo.addEventListener("change", function() {
+
+      if (archivo.files.length > 0) {
+        mostrarImagen(archivo.files[0]);
+      }
+
+    });
+
+
+    // ARRASTRAR IMAGEN
+
+    zona.addEventListener("dragover", function(event) {
+
+      event.preventDefault();
+
+      zona.classList.add("activa");
+
+    });
+
+
+    zona.addEventListener("dragleave", function() {
+
+      zona.classList.remove("activa");
+
+    });
+
+
+    zona.addEventListener("drop", function(event) {
+
+      event.preventDefault();
+
+      zona.classList.remove("activa");
+
+      const file = event.dataTransfer.files[0];
+
+      mostrarImagen(file);
+
+    });
+
+  </script>
+
+</body>
+</html>
