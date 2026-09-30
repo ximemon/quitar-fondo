@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quitar fondo</title>
+<title>XimCut</title>
 
 <style>
 * {
@@ -14,58 +14,68 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #f7f7f8;
-  color: #222;
+  background: #fffafb;
+  color: #292629;
 }
 
 .contenedor {
   width: 100%;
-  max-width: 950px;
+  max-width: 900px;
   margin: auto;
   padding: 55px 20px;
   text-align: center;
 }
 
-h1 {
-  font-size: 48px;
-  margin: 0 0 8px;
+/* LOGO */
+
+.logo {
+  font-size: 46px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  margin-bottom: 8px;
+}
+
+.logo span {
+  color: #e88ba7;
 }
 
 .subtitulo {
-  color: #666;
-  font-size: 18px;
+  color: #777;
+  font-size: 17px;
   margin-bottom: 35px;
 }
 
 /* ZONA INICIAL */
 
 .zona {
-  background: white;
-  border: 2px dashed #ccc;
+  background: #ffffff;
+  border: 2px dashed #edc6d1;
   border-radius: 22px;
   padding: 65px 30px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.06);
-  transition: .2s;
+  box-shadow: 0 8px 30px rgba(190, 120, 145, 0.08);
+  transition: 0.2s;
 }
 
 .zona.arrastrando {
-  border-color: #111;
+  border-color: #e88ba7;
+  background: #fff7f9;
   transform: scale(1.01);
 }
 
 .icono {
-  font-size: 55px;
+  font-size: 48px;
   margin-bottom: 15px;
 }
 
 .zona h2 {
-  font-size: 27px;
+  font-size: 26px;
   margin: 0 0 10px;
 }
 
 .zona p {
   color: #777;
-  line-height: 1.5;
+  line-height: 1.6;
+  margin-bottom: 24px;
 }
 
 button {
@@ -75,21 +85,21 @@ button {
   font-size: 16px;
   cursor: pointer;
   font-weight: 600;
+  transition: 0.2s;
 }
 
 .boton-principal {
-  background: #222;
+  background: #e88ba7;
   color: white;
 }
 
 .boton-principal:hover {
-  background: #444;
+  background: #df7899;
 }
 
 #archivo {
   display: none;
 }
-
 
 /* PROCESANDO */
 
@@ -98,74 +108,54 @@ button {
   background: white;
   border-radius: 22px;
   padding: 55px 30px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.06);
-}
-
-.preview-proceso {
-  position: relative;
-  display: inline-block;
-  max-width: 500px;
-  margin-bottom: 25px;
-}
-
-.preview-proceso img {
-  max-width: 100%;
-  max-height: 430px;
-  display: block;
-  border-radius: 12px;
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,.70);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 8px 30px rgba(190, 120, 145, 0.08);
 }
 
 .spinner {
   width: 55px;
   height: 55px;
-  border: 6px solid #ddd;
-  border-top-color: #222;
+  margin: 0 auto 25px;
+
+  border: 5px solid #f5dce3;
+  border-top-color: #e88ba7;
   border-radius: 50%;
-  animation: girar .8s linear infinite;
+
+  animation: girar 0.8s linear infinite;
 }
 
 @keyframes girar {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #estado {
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 700;
   margin-bottom: 8px;
 }
 
 #detalle {
-  color: #777;
+  color: #888;
   font-size: 14px;
 }
 
 .barra {
   width: 100%;
-  max-width: 450px;
-  height: 7px;
-  background: #eee;
+  max-width: 420px;
+  height: 6px;
+  background: #f5e9ed;
   border-radius: 20px;
-  margin: 20px auto 0;
+  margin: 22px auto 0;
   overflow: hidden;
 }
 
 #progreso {
   height: 100%;
   width: 5%;
-  background: #222;
-  transition: width .3s ease;
+  background: #e88ba7;
+  transition: width 0.3s ease;
 }
-
 
 /* RESULTADO */
 
@@ -177,19 +167,27 @@ button {
   background: white;
   border-radius: 22px;
   padding: 35px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.06);
+  box-shadow: 0 8px 30px rgba(190, 120, 145, 0.08);
 }
 
+.resultado-card h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+/* CUADRICULADO TRANSPARENCIA */
+
 .checker {
-  max-width: 600px;
+  max-width: 560px;
   margin: auto;
 
   background-color: white;
+
   background-image:
-    linear-gradient(45deg, #ddd 25%, transparent 25%),
-    linear-gradient(-45deg, #ddd 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #ddd 75%),
-    linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    linear-gradient(45deg, #f3e7eb 25%, transparent 25%),
+    linear-gradient(-45deg, #f3e7eb 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f3e7eb 75%),
+    linear-gradient(-45deg, transparent 75%, #f3e7eb 75%);
 
   background-size: 24px 24px;
   background-position:
@@ -204,33 +202,80 @@ button {
 
 #imagenResultado {
   max-width: 100%;
-  max-height: 550px;
+  max-height: 520px;
   display: block;
   margin: auto;
 }
+
+/* CODIGO */
+
+.codigo-area {
+  max-width: 420px;
+  margin: 28px auto 0;
+  text-align: left;
+}
+
+.codigo-area label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+#codigo {
+  width: 100%;
+  padding: 14px 15px;
+
+  border: 1px solid #e4d5da;
+  border-radius: 10px;
+
+  font-size: 17px;
+  outline: none;
+
+  background: #fff;
+}
+
+#codigo:focus {
+  border-color: #e88ba7;
+  box-shadow: 0 0 0 3px rgba(232, 139, 167, 0.12);
+}
+
+/* BOTONES */
 
 .acciones {
   display: flex;
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
-  margin-top: 25px;
+  margin-top: 22px;
 }
 
 .copiar {
-  background: #222;
+  background: #e88ba7;
   color: white;
 }
 
+.copiar:hover {
+  background: #df7899;
+}
+
 .descargar {
-  background: #e9e9e9;
-  color: #222;
+  background: #f7e9ed;
+  color: #8f5366;
+}
+
+.descargar:hover {
+  background: #f2dce3;
 }
 
 .nueva {
   background: transparent;
-  color: #555;
-  border: 1px solid #ccc;
+  color: #777;
+  border: 1px solid #ddd;
+}
+
+.nueva:hover {
+  background: #fafafa;
 }
 
 .error {
@@ -239,278 +284,392 @@ button {
   font-size: 14px;
 }
 
+/* MOVIL */
+
+@media (max-width: 600px) {
+  .contenedor {
+    padding: 35px 15px;
+  }
+
+  .logo {
+    font-size: 39px;
+  }
+
+  .zona {
+    padding: 50px 20px;
+  }
+
+  .resultado-card {
+    padding: 25px 18px;
+  }
+}
 </style>
 </head>
-
 
 <body>
 
 <main class="contenedor">
 
-<h1>Quitar fondo</h1>
+  <div class="logo">
+    Xim<span>Cut</span>
+  </div>
 
-<div class="subtitulo">
-  Pegá una imagen y obtenela sin fondo.
-</div>
-
-
-<!-- PANTALLA INICIAL -->
-
-<section id="inicio" class="zona">
-
-  <div class="icono">🖼️</div>
-
-  <h2>Pegá una imagen</h2>
-
-  <p>
-    Copiá una imagen y presioná <strong>Ctrl + V</strong><br>
-    o arrastrala hasta acá.
-  </p>
-
-  <button
-    class="boton-principal"
-    onclick="document.getElementById('archivo').click()">
-    Elegir imagen
-  </button>
-
-  <input
-    type="file"
-    id="archivo"
-    accept="image/png,image/jpeg,image/webp">
-
-</section>
+  <div class="subtitulo">
+    Pegá una imagen y obtenela sin fondo.
+  </div>
 
 
+  <!-- INICIO -->
 
-<!-- PANTALLA DE PROCESAMIENTO -->
+  <section id="inicio" class="zona">
 
-<section id="procesando">
+    <div class="icono">🖼️</div>
 
-  <div class="preview-proceso">
+    <h2>Pegá una imagen</h2>
 
-    <img id="imagenOriginal">
+    <p>
+      Copiá una imagen y presioná
+      <strong>Ctrl + V</strong><br>
+      o arrastrala hasta acá.
+    </p>
 
-    <div class="overlay">
-      <div class="spinner"></div>
+    <button
+      class="boton-principal"
+      onclick="document.getElementById('archivo').click()"
+    >
+      Elegir imagen
+    </button>
+
+    <input
+      type="file"
+      id="archivo"
+      accept="image/png,image/jpeg,image/webp"
+    >
+
+  </section>
+
+
+  <!-- PROCESANDO -->
+
+  <section id="procesando">
+
+    <div class="spinner"></div>
+
+    <div id="estado">
+      Eliminando fondo...
     </div>
 
-  </div>
-
-  <div id="estado">
-    Eliminando fondo...
-  </div>
-
-  <div id="detalle">
-    Preparando el modelo de inteligencia artificial.
-  </div>
-
-  <div class="barra">
-    <div id="progreso"></div>
-  </div>
-
-</section>
-
-
-
-<!-- RESULTADO -->
-
-<section id="resultado">
-
-  <div class="resultado-card">
-
-    <h2>¡Fondo eliminado!</h2>
-
-    <div class="checker">
-      <img id="imagenResultado">
+    <div id="detalle">
+      Procesando la imagen.
     </div>
 
-    <div class="acciones">
+    <div class="barra">
+      <div id="progreso"></div>
+    </div>
 
-      <button class="copiar" id="copiar">
-        Copiar imagen
-      </button>
+  </section>
 
-      <button class="descargar" id="descargar">
-        Descargar PNG
-      </button>
 
-      <button class="nueva" id="nueva">
-        Nueva imagen
-      </button>
+  <!-- RESULTADO -->
+
+  <section id="resultado">
+
+    <div class="resultado-card">
+
+      <h2>¡Listo!</h2>
+
+      <div class="checker">
+        <img id="imagenResultado">
+      </div>
+
+
+      <div class="codigo-area">
+
+        <label for="codigo">
+          Código del producto
+        </label>
+
+        <input
+          id="codigo"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="Ej. 110755"
+        >
+
+      </div>
+
+
+      <div class="acciones">
+
+        <button
+          class="copiar"
+          id="copiar"
+        >
+          Copiar imagen
+        </button>
+
+        <button
+          class="descargar"
+          id="descargar"
+        >
+          Descargar PNG
+        </button>
+
+        <button
+          class="nueva"
+          id="nueva"
+        >
+          Procesar otra imagen
+        </button>
+
+      </div>
+
+      <div
+        id="mensajeError"
+        class="error"
+      ></div>
 
     </div>
 
-    <div id="mensajeError" class="error"></div>
-
-  </div>
-
-</section>
+  </section>
 
 </main>
 
 
-
 <script type="module">
 
-import { removeBackground } from
-"https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm";
+import {
+  removeBackground,
+  preload
+} from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm";
 
 
-const inicio = document.getElementById("inicio");
-const procesando = document.getElementById("procesando");
-const resultado = document.getElementById("resultado");
+const inicio =
+  document.getElementById("inicio");
 
-const archivo = document.getElementById("archivo");
+const procesando =
+  document.getElementById("procesando");
 
-const imagenOriginal =
-document.getElementById("imagenOriginal");
+const resultado =
+  document.getElementById("resultado");
+
+const archivo =
+  document.getElementById("archivo");
 
 const imagenResultado =
-document.getElementById("imagenResultado");
+  document.getElementById("imagenResultado");
 
 const estado =
-document.getElementById("estado");
+  document.getElementById("estado");
 
 const detalle =
-document.getElementById("detalle");
+  document.getElementById("detalle");
 
 const progreso =
-document.getElementById("progreso");
+  document.getElementById("progreso");
 
 const copiar =
-document.getElementById("copiar");
+  document.getElementById("copiar");
 
 const descargar =
-document.getElementById("descargar");
+  document.getElementById("descargar");
 
 const nueva =
-document.getElementById("nueva");
+  document.getElementById("nueva");
+
+const codigo =
+  document.getElementById("codigo");
 
 const mensajeError =
-document.getElementById("mensajeError");
+  document.getElementById("mensajeError");
 
 
 let blobResultado = null;
-let urlOriginal = null;
 let urlResultado = null;
+let procesandoAhora = false;
 
 
+/* CONFIGURACION DE XIMCUT */
+
+const config = {
+
+  device: "gpu",
+
+  model: "large",
+
+  proxyToWorker: true,
+
+  output: {
+    format: "image/png",
+    quality: 1
+  },
+
+  progress: function(key, current, total) {
+
+    /*
+      El callback también se utiliza cuando
+      se descargan archivos del modelo.
+    */
+
+    if (!procesandoAhora) return;
+
+    if (key.includes("compute")) {
+
+      let porcentaje = 15;
+
+      if (total && total > 0) {
+        porcentaje =
+          Math.round((current / total) * 85) + 10;
+      }
+
+      porcentaje =
+        Math.max(10, Math.min(95, porcentaje));
+
+      progreso.style.width =
+        porcentaje + "%";
+    }
+
+
+    if (key.includes("inference")) {
+
+      detalle.textContent =
+        "Detectando el producto...";
+
+    }
+
+    else if (key.includes("mask")) {
+
+      detalle.textContent =
+        "Separando el fondo...";
+
+    }
+
+    else if (key.includes("encode")) {
+
+      detalle.textContent =
+        "Preparando el PNG...";
+
+    }
+
+  }
+
+};
+
+
+/* PRECARGAR IA */
+
+async function prepararXimCut() {
+
+  try {
+
+    await preload(config);
+
+    console.log(
+      "XimCut listo para procesar imágenes."
+    );
+
+  }
+
+  catch (error) {
+
+    /*
+      Si WebGPU no funciona en el equipo,
+      no bloqueamos la página.
+    */
+
+    console.log(
+      "La precarga con GPU no pudo completarse.",
+      error
+    );
+
+  }
+
+}
+
+prepararXimCut();
+
+
+/* PROCESAR IMAGEN */
 
 async function procesarImagen(file) {
 
-  if (!file || !file.type.startsWith("image/")) {
+  if (
+    !file ||
+    !file.type.startsWith("image/")
+  ) {
     return;
   }
 
 
-  /* MOSTRAR IMAGEN ORIGINAL */
-
-  if (urlOriginal) {
-    URL.revokeObjectURL(urlOriginal);
+  if (procesandoAhora) {
+    return;
   }
 
-  urlOriginal = URL.createObjectURL(file);
 
-  imagenOriginal.src = urlOriginal;
+  procesandoAhora = true;
 
+  mensajeError.textContent = "";
 
   inicio.style.display = "none";
+
   resultado.style.display = "none";
+
   procesando.style.display = "block";
 
-  progreso.style.width = "5%";
+  progreso.style.width = "8%";
 
-  estado.textContent = "Eliminando fondo...";
+  estado.textContent =
+    "Eliminando fondo...";
 
   detalle.textContent =
-  "Preparando la inteligencia artificial.";
+    "Procesando la imagen.";
 
 
   try {
 
-    const config = {
-
-      output: {
-        format: "image/png",
-        quality: 1
-      },
-
-      progress: function(key, current, total) {
-
-        let porcentaje = 10;
-
-        if (total && total > 0) {
-          porcentaje =
-          Math.round((current / total) * 90);
-        }
-
-        porcentaje =
-        Math.max(5, Math.min(95, porcentaje));
-
-        progreso.style.width =
-        porcentaje + "%";
-
-
-        if (key.includes("fetch")) {
-
-          detalle.textContent =
-          "Cargando el modelo de inteligencia artificial...";
-
-        }
-
-        else if (key.includes("inference")) {
-
-          detalle.textContent =
-          "Detectando el objeto principal...";
-
-        }
-
-        else if (key.includes("mask")) {
-
-          detalle.textContent =
-          "Separando el fondo...";
-
-        }
-
-        else if (key.includes("encode")) {
-
-          detalle.textContent =
-          "Preparando tu PNG transparente...";
-
-        }
-
-      }
-
-    };
-
-
     blobResultado =
-    await removeBackground(file, config);
+      await removeBackground(
+        file,
+        config
+      );
 
 
     progreso.style.width = "100%";
 
-    detalle.textContent =
-    "¡Listo!";
+    detalle.textContent = "¡Listo!";
 
 
     if (urlResultado) {
-      URL.revokeObjectURL(urlResultado);
+
+      URL.revokeObjectURL(
+        urlResultado
+      );
+
     }
 
+
     urlResultado =
-    URL.createObjectURL(blobResultado);
+      URL.createObjectURL(
+        blobResultado
+      );
+
 
     imagenResultado.src =
-    urlResultado;
+      urlResultado;
 
 
     setTimeout(function() {
 
-      procesando.style.display = "none";
-      resultado.style.display = "block";
+      procesando.style.display =
+        "none";
 
-    }, 350);
+      resultado.style.display =
+        "block";
+
+      codigo.focus();
+
+    }, 250);
 
 
   }
@@ -519,222 +678,350 @@ async function procesarImagen(file) {
 
     console.error(error);
 
+
+    /*
+      Si GPU da problema, mostramos
+      un mensaje claro en vez de romper
+      toda la página.
+    */
+
     estado.textContent =
-    "No pudimos procesar esta imagen.";
+      "No pudimos procesar esta imagen.";
 
     detalle.textContent =
-    "Probá nuevamente con una imagen JPG, PNG o WEBP.";
+      "Actualizá la página y probá nuevamente.";
 
-    progreso.style.width = "0%";
+    progreso.style.width =
+      "0%";
+
+  }
+
+  finally {
+
+    procesandoAhora = false;
 
   }
 
 }
 
 
-
-/* CTRL + V */
+/* PEGAR CON CTRL + V */
 
 document.addEventListener(
-"paste",
-function(event) {
+  "paste",
+  function(event) {
 
-  const items =
-  event.clipboardData?.items;
+    const items =
+      event.clipboardData?.items;
 
-  if (!items) return;
+    if (!items) return;
 
 
-  for (const item of items) {
+    for (const item of items) {
 
-    if (item.type.startsWith("image/")) {
+      if (
+        item.type.startsWith("image/")
+      ) {
 
-      const file =
-      item.getAsFile();
+        const file =
+          item.getAsFile();
 
-      procesarImagen(file);
+        procesarImagen(file);
 
-      break;
+        break;
+
+      }
 
     }
 
   }
-
-});
-
+);
 
 
 /* ELEGIR ARCHIVO */
 
 archivo.addEventListener(
-"change",
-function() {
+  "change",
+  function() {
 
-  if (archivo.files.length > 0) {
+    if (
+      archivo.files.length > 0
+    ) {
 
-    procesarImagen(
-      archivo.files[0]
-    );
+      procesarImagen(
+        archivo.files[0]
+      );
+
+    }
 
   }
-
-});
-
+);
 
 
 /* ARRASTRAR */
 
 inicio.addEventListener(
-"dragover",
-function(event) {
+  "dragover",
+  function(event) {
 
-  event.preventDefault();
+    event.preventDefault();
 
-  inicio.classList.add(
-    "arrastrando"
-  );
+    inicio.classList.add(
+      "arrastrando"
+    );
 
-});
-
-
-inicio.addEventListener(
-"dragleave",
-function() {
-
-  inicio.classList.remove(
-    "arrastrando"
-  );
-
-});
+  }
+);
 
 
 inicio.addEventListener(
-"drop",
-function(event) {
+  "dragleave",
+  function() {
 
-  event.preventDefault();
+    inicio.classList.remove(
+      "arrastrando"
+    );
 
-  inicio.classList.remove(
-    "arrastrando"
-  );
-
-  const file =
-  event.dataTransfer.files[0];
-
-  procesarImagen(file);
-
-});
+  }
+);
 
 
+inicio.addEventListener(
+  "drop",
+  function(event) {
 
-/* DESCARGAR PNG */
+    event.preventDefault();
 
-descargar.addEventListener(
-"click",
-function() {
+    inicio.classList.remove(
+      "arrastrando"
+    );
+
+    const file =
+      event.dataTransfer.files[0];
+
+    procesarImagen(file);
+
+  }
+);
+
+
+/* ACTUALIZAR NOMBRE DEL BOTON */
+
+codigo.addEventListener(
+  "input",
+  actualizarNombreDescarga
+);
+
+
+function actualizarNombreDescarga() {
+
+  const valor =
+    codigo.value.trim();
+
+  if (valor) {
+
+    descargar.textContent =
+      "Descargar " +
+      valor +
+      ".png";
+
+  }
+
+  else {
+
+    descargar.textContent =
+      "Descargar PNG";
+
+  }
+
+}
+
+
+/* DESCARGAR */
+
+function descargarImagen() {
 
   if (!blobResultado) return;
 
+
+  const valor =
+    codigo.value.trim();
+
+
+  const nombre =
+    valor
+      ? valor + ".png"
+      : "imagen-sin-fondo.png";
+
+
+  const url =
+    URL.createObjectURL(
+      blobResultado
+    );
+
+
   const enlace =
-  document.createElement("a");
+    document.createElement("a");
 
-  enlace.href =
-  URL.createObjectURL(blobResultado);
 
-  enlace.download =
-  "imagen-sin-fondo.png";
+  enlace.href = url;
+
+  enlace.download = nombre;
 
   enlace.click();
 
+
   setTimeout(
-    () => URL.revokeObjectURL(enlace.href),
+    function() {
+
+      URL.revokeObjectURL(url);
+
+    },
     1000
   );
 
-});
+}
 
+
+descargar.addEventListener(
+  "click",
+  descargarImagen
+);
+
+
+/* ENTER EN CODIGO = DESCARGAR */
+
+codigo.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (
+      event.key === "Enter"
+    ) {
+
+      event.preventDefault();
+
+      descargarImagen();
+
+    }
+
+  }
+);
 
 
 /* COPIAR PNG */
 
 copiar.addEventListener(
-"click",
-async function() {
+  "click",
+  async function() {
 
-  mensajeError.textContent = "";
-
-  if (!blobResultado) return;
+    mensajeError.textContent = "";
 
 
-  try {
-
-    const pngBlob =
-    new Blob(
-      [await blobResultado.arrayBuffer()],
-      { type: "image/png" }
-    );
+    if (!blobResultado) return;
 
 
-    await navigator.clipboard.write([
-      new ClipboardItem({
-        "image/png": pngBlob
-      })
-    ]);
+    try {
+
+      const pngBlob =
+        new Blob(
+          [
+            await blobResultado
+              .arrayBuffer()
+          ],
+          {
+            type: "image/png"
+          }
+        );
 
 
-    copiar.textContent =
-    "✓ Copiada";
+      await navigator.clipboard.write(
+        [
+          new ClipboardItem(
+            {
+              "image/png":
+                pngBlob
+            }
+          )
+        ]
+      );
 
-
-    setTimeout(function() {
 
       copiar.textContent =
-      "Copiar imagen";
+        "✓ Copiada";
 
-    }, 1600);
 
+      setTimeout(
+        function() {
+
+          copiar.textContent =
+            "Copiar imagen";
+
+        },
+        1500
+      );
+
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      mensajeError.textContent =
+        "Chrome bloqueó la copia automática. Podés usar Descargar PNG.";
+
+    }
 
   }
-
-  catch (error) {
-
-    console.error(error);
-
-    mensajeError.textContent =
-    "Tu navegador bloqueó la copia automática. Podés usar Descargar PNG.";
-
-  }
-
-});
-
+);
 
 
 /* NUEVA IMAGEN */
 
-nueva.addEventListener(
-"click",
-function() {
+function reiniciar() {
 
   resultado.style.display =
-  "none";
+    "none";
 
   procesando.style.display =
-  "none";
+    "none";
 
   inicio.style.display =
-  "block";
+    "block";
+
 
   archivo.value = "";
 
+  codigo.value = "";
+
   blobResultado = null;
 
-  progreso.style.width =
-  "5%";
+  progreso.style.width = "5%";
 
-  mensajeError.textContent =
-  "";
+  mensajeError.textContent = "";
 
-});
+  descargar.textContent =
+    "Descargar PNG";
+
+
+  if (urlResultado) {
+
+    URL.revokeObjectURL(
+      urlResultado
+    );
+
+    urlResultado = null;
+
+  }
+
+}
+
+
+nueva.addEventListener(
+  "click",
+  reiniciar
+);
 
 </script>
 
