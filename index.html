@@ -15,6 +15,7 @@ fill='white'>X</text>
 </svg>">
 
 <style>
+
 * {
   box-sizing: border-box;
 }
@@ -50,6 +51,7 @@ body {
   font-size: 17px;
   margin-bottom: 35px;
 }
+
 
 /* INICIO */
 
@@ -107,6 +109,7 @@ button {
   display: none;
 }
 
+
 /* PROCESANDO */
 
 #procesando {
@@ -128,7 +131,9 @@ button {
 }
 
 @keyframes girar {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #estado {
@@ -141,6 +146,7 @@ button {
   color: #888;
   font-size: 14px;
 }
+
 
 /* RESULTADO */
 
@@ -163,6 +169,7 @@ button {
 .checker {
   max-width: 560px;
   margin: auto;
+
   background-color: white;
 
   background-image:
@@ -172,6 +179,7 @@ button {
     linear-gradient(-45deg,transparent 75%,#f3e7eb 75%);
 
   background-size: 24px 24px;
+
   background-position:
     0 0,
     0 12px,
@@ -188,6 +196,7 @@ button {
   display: block;
   margin: auto;
 }
+
 
 /* CÓDIGO */
 
@@ -218,6 +227,9 @@ button {
   border-color: #e88ba7;
   box-shadow: 0 0 0 3px rgba(232,139,167,.12);
 }
+
+
+/* BOTONES */
 
 .acciones {
   display: flex;
@@ -261,6 +273,7 @@ button {
   font-size: 14px;
 }
 
+
 /* ÚLTIMA DESCARGA */
 
 #ultimaDescarga {
@@ -286,9 +299,11 @@ button {
 .ultima-preview {
   width: 100%;
   height: 125px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border-radius: 9px;
 
   background-color: white;
@@ -300,6 +315,7 @@ button {
     linear-gradient(-45deg,transparent 75%,#f7eef1 75%);
 
   background-size: 18px 18px;
+
   background-position:
     0 0,
     0 9px,
@@ -319,7 +335,9 @@ button {
   color: #555;
 }
 
+
 @media (max-width:600px) {
+
   .contenedor {
     padding: 35px 15px;
   }
@@ -335,130 +353,156 @@ button {
   .resultado-card {
     padding: 25px 18px;
   }
+
 }
+
 </style>
 </head>
+
 
 <body>
 
 <main class="contenedor">
 
-  <div class="logo">
-    Xim<span>Cut</span>
+<div class="logo">
+  Xim<span>Cut</span>
+</div>
+
+<div class="subtitulo">
+  Pegá una imagen y obtenela sin fondo.
+</div>
+
+
+<!-- INICIO -->
+
+<section id="inicio" class="zona">
+
+  <div class="icono">🖼️</div>
+
+  <h2>Pegá una imagen</h2>
+
+  <p>
+    Copiá una imagen y presioná
+    <strong>Ctrl + V</strong><br>
+    o arrastrala hasta acá.
+  </p>
+
+  <button
+    class="boton-principal"
+    onclick="document.getElementById('archivo').click()"
+  >
+    Elegir imagen
+  </button>
+
+  <input
+    type="file"
+    id="archivo"
+    accept="image/png,image/jpeg,image/webp"
+  >
+
+</section>
+
+
+<!-- ÚLTIMA DESCARGA -->
+
+<section id="ultimaDescarga">
+
+  <div class="ultima-titulo">
+    Última descarga
   </div>
 
-  <div class="subtitulo">
-    Pegá una imagen y obtenela sin fondo.
+  <div class="ultima-card">
+
+    <div class="ultima-preview">
+      <img id="ultimaImagen">
+    </div>
+
+    <div id="ultimoCodigo"></div>
+
   </div>
 
-  <section id="inicio" class="zona">
+</section>
 
-    <div class="icono">🖼️</div>
 
-    <h2>Pegá una imagen</h2>
+<!-- PROCESANDO -->
 
-    <p>
-      Copiá una imagen y presioná
-      <strong>Ctrl + V</strong><br>
-      o arrastrala hasta acá.
-    </p>
+<section id="procesando">
 
-    <button
-      class="boton-principal"
-      onclick="document.getElementById('archivo').click()"
-    >
-      Elegir imagen
-    </button>
+  <div class="spinner"></div>
+
+  <div id="estado">
+    Eliminando fondo...
+  </div>
+
+  <div id="detalle">
+    Detectando el fondo blanco.
+  </div>
+
+</section>
+
+
+<!-- RESULTADO -->
+
+<section id="resultado">
+
+<div class="resultado-card">
+
+  <h2>¡Listo!</h2>
+
+  <div class="checker">
+    <img id="imagenResultado">
+  </div>
+
+
+  <div class="codigo-area">
+
+    <label for="codigo">
+      Código del producto
+    </label>
 
     <input
-      type="file"
-      id="archivo"
-      accept="image/png,image/jpeg,image/webp"
+      id="codigo"
+      type="text"
+      autocomplete="off"
+      placeholder="Ej. 110755"
     >
 
-  </section>
+  </div>
 
-  <section id="ultimaDescarga">
 
-    <div class="ultima-titulo">
-      Última descarga
-    </div>
+  <div class="acciones">
 
-    <div class="ultima-card">
+    <button
+      class="copiar"
+      id="copiar"
+    >
+      Copiar imagen
+    </button>
 
-      <div class="ultima-preview">
-        <img id="ultimaImagen">
-      </div>
+    <button
+      class="descargar"
+      id="descargar"
+    >
+      Descargar PNG
+    </button>
 
-      <div id="ultimoCodigo"></div>
+    <button
+      class="nueva"
+      id="nueva"
+    >
+      Procesar otra imagen
+    </button>
 
-    </div>
+  </div>
 
-  </section>
+  <div
+    id="mensajeError"
+    class="error"
+  ></div>
 
-  <section id="procesando">
+</div>
 
-    <div class="spinner"></div>
-
-    <div id="estado">
-      Eliminando fondo...
-    </div>
-
-    <div id="detalle">
-      Detectando el fondo blanco.
-    </div>
-
-  </section>
-
-  <section id="resultado">
-
-    <div class="resultado-card">
-
-      <h2>¡Listo!</h2>
-
-      <div class="checker">
-        <img id="imagenResultado">
-      </div>
-
-      <div class="codigo-area">
-
-        <label for="codigo">
-          Código del producto
-        </label>
-
-        <input
-          id="codigo"
-          type="text"
-          autocomplete="off"
-          placeholder="Ej. 110755"
-        >
-
-      </div>
-
-      <div class="acciones">
-
-        <button class="copiar" id="copiar">
-          Copiar imagen
-        </button>
-
-        <button class="descargar" id="descargar">
-          Descargar PNG
-        </button>
-
-        <button class="nueva" id="nueva">
-          Procesar otra imagen
-        </button>
-
-      </div>
-
-      <div
-        id="mensajeError"
-        class="error"
-      ></div>
-
-    </div>
-
-  </section>
+</section>
 
 </main>
 
@@ -510,11 +554,10 @@ let urlResultado = null;
 let procesandoAhora = false;
 
 
-/* =========================================
-   NUEVO MOTOR XIMCUT
-   Elimina únicamente el fondo claro
-   conectado con los bordes de la imagen.
-   ========================================= */
+/* ======================================
+   MOTOR XIMCUT
+   FONDO BLANCO + PROTECCIÓN DE BORDES
+   ====================================== */
 
 async function quitarFondoBlanco(file) {
 
@@ -524,18 +567,30 @@ async function quitarFondoBlanco(file) {
   const canvas =
     document.createElement("canvas");
 
-  canvas.width = bitmap.width;
-  canvas.height = bitmap.height;
+  canvas.width =
+    bitmap.width;
+
+  canvas.height =
+    bitmap.height;
+
 
   const ctx =
     canvas.getContext(
       "2d",
-      { willReadFrequently: true }
+      {
+        willReadFrequently: true
+      }
     );
 
-  ctx.drawImage(bitmap, 0, 0);
+
+  ctx.drawImage(
+    bitmap,
+    0,
+    0
+  );
 
   bitmap.close();
+
 
   const imagen =
     ctx.getImageData(
@@ -545,65 +600,250 @@ async function quitarFondoBlanco(file) {
       canvas.height
     );
 
-  const data = imagen.data;
 
-  const ancho = canvas.width;
-  const alto = canvas.height;
+  const data =
+    imagen.data;
 
-  const total = ancho * alto;
+  const ancho =
+    canvas.width;
 
-  const visitado =
+  const alto =
+    canvas.height;
+
+  const total =
+    ancho * alto;
+
+
+  /* ===========================
+     1. DETECTAR CONTENIDO
+     =========================== */
+
+  const protegido =
     new Uint8Array(total);
 
-  /*
-    Umbral conservador:
-    solo consideramos fondo los tonos
-    realmente muy cercanos al blanco.
-  */
 
-  function esFondo(indice) {
+  for (
+    let i = 0;
+    i < total;
+    i++
+  ) {
 
-    const p = indice * 4;
+    const p =
+      i * 4;
 
-    const r = data[p];
-    const g = data[p + 1];
-    const b = data[p + 2];
+    const r =
+      data[p];
+
+    const g =
+      data[p + 1];
+
+    const b =
+      data[p + 2];
+
 
     const minimo =
-      Math.min(r, g, b);
+      Math.min(r,g,b);
 
     const maximo =
-      Math.max(r, g, b);
+      Math.max(r,g,b);
+
+    const diferencia =
+      maximo - minimo;
+
 
     /*
-      Debe ser muy claro y prácticamente
-      neutro. Esto evita comerse colores
-      pastel como la mancha verde del Uriage.
+      Protegemos:
+      - producto
+      - sombras
+      - cremas
+      - colores pastel
     */
 
-    return (
-      minimo >= 242 &&
-      (maximo - minimo) <= 15
-    );
+    if (
+      minimo < 244 ||
+      diferencia > 9
+    ) {
+
+      protegido[i] = 1;
+
+    }
 
   }
 
 
-  /*
-    Empezamos únicamente desde los bordes.
+  /* ===========================
+     2. AMPLIAR PROTECCIÓN
+     =========================== */
 
-    Así un blanco que esté DENTRO del producto
-    no desaparece.
+  let mascara =
+    protegido;
 
-    Solo desaparece el blanco exterior que
-    tiene conexión con el borde de la foto.
-  */
+
+  const expansiones = 5;
+
+
+  for (
+    let paso = 0;
+    paso < expansiones;
+    paso++
+  ) {
+
+    const nueva =
+      new Uint8Array(mascara);
+
+
+    for (
+      let y = 1;
+      y < alto - 1;
+      y++
+    ) {
+
+      for (
+        let x = 1;
+        x < ancho - 1;
+        x++
+      ) {
+
+        const i =
+          y * ancho + x;
+
+
+        if (mascara[i]) {
+          continue;
+        }
+
+
+        const vecinoProtegido =
+
+          mascara[i - 1] ||
+
+          mascara[i + 1] ||
+
+          mascara[i - ancho] ||
+
+          mascara[i + ancho] ||
+
+          mascara[
+            i - ancho - 1
+          ] ||
+
+          mascara[
+            i - ancho + 1
+          ] ||
+
+          mascara[
+            i + ancho - 1
+          ] ||
+
+          mascara[
+            i + ancho + 1
+          ];
+
+
+        if (!vecinoProtegido) {
+          continue;
+        }
+
+
+        const p =
+          i * 4;
+
+        const r =
+          data[p];
+
+        const g =
+          data[p + 1];
+
+        const b =
+          data[p + 2];
+
+
+        /*
+          Blanco completamente puro
+          sigue siendo fondo.
+
+          Tonos suaves pegados al
+          producto quedan protegidos.
+        */
+
+        if (
+          r < 254 ||
+          g < 254 ||
+          b < 254
+        ) {
+
+          nueva[i] = 1;
+
+        }
+
+      }
+
+    }
+
+
+    mascara =
+      nueva;
+
+  }
+
+
+  /* ===========================
+     3. BUSCAR FONDO EXTERIOR
+     =========================== */
+
+  const visitado =
+    new Uint8Array(total);
+
 
   const cola =
     new Int32Array(total);
 
+
   let inicioCola = 0;
   let finCola = 0;
+
+
+  function esFondo(indice) {
+
+    if (mascara[indice]) {
+      return false;
+    }
+
+
+    const p =
+      indice * 4;
+
+    const r =
+      data[p];
+
+    const g =
+      data[p + 1];
+
+    const b =
+      data[p + 2];
+
+
+    const minimo =
+      Math.min(r,g,b);
+
+    const maximo =
+      Math.max(r,g,b);
+
+
+    /*
+      El fondo tiene que ser
+      MUY blanco y MUY neutro.
+    */
+
+    return (
+
+      minimo >= 248 &&
+
+      (maximo - minimo) <= 7
+
+    );
+
+  }
 
 
   function agregar(indice) {
@@ -613,104 +853,140 @@ async function quitarFondoBlanco(file) {
       indice >= total ||
       visitado[indice]
     ) {
+
       return;
+
     }
+
 
     if (!esFondo(indice)) {
       return;
     }
 
+
     visitado[indice] = 1;
 
-    cola[finCola++] = indice;
+    cola[finCola++] =
+      indice;
 
   }
 
 
-  /* BORDE SUPERIOR E INFERIOR */
+  /* Bordes superior e inferior */
 
-  for (let x = 0; x < ancho; x++) {
+  for (
+    let x = 0;
+    x < ancho;
+    x++
+  ) {
 
     agregar(x);
 
     agregar(
-      (alto - 1) * ancho + x
+      (alto - 1) *
+      ancho +
+      x
     );
 
   }
 
 
-  /* BORDE IZQUIERDO Y DERECHO */
-
-  for (let y = 0; y < alto; y++) {
-
-    agregar(y * ancho);
-
-    agregar(
-      y * ancho + ancho - 1
-    );
-
-  }
-
-
-  /* FLOOD FILL */
-
-  while (inicioCola < finCola) {
-
-    const indice =
-      cola[inicioCola++];
-
-    const x =
-      indice % ancho;
-
-    const y =
-      Math.floor(indice / ancho);
-
-
-    if (x > 0)
-      agregar(indice - 1);
-
-    if (x < ancho - 1)
-      agregar(indice + 1);
-
-    if (y > 0)
-      agregar(indice - ancho);
-
-    if (y < alto - 1)
-      agregar(indice + ancho);
-
-  }
-
-
-  /*
-    Convertimos solamente esa zona
-    exterior en transparente.
-  */
+  /* Bordes izquierdo y derecho */
 
   for (
-    let i = 0;
-    i < total;
-    i++
+    let y = 0;
+    y < alto;
+    y++
   ) {
 
-    if (visitado[i]) {
+    agregar(
+      y * ancho
+    );
 
-      data[i * 4 + 3] = 0;
+    agregar(
+      y * ancho +
+      ancho - 1
+    );
+
+  }
+
+
+  /* ===========================
+     4. FLOOD FILL
+     =========================== */
+
+  while (
+    inicioCola <
+    finCola
+  ) {
+
+    const indice =
+      cola[
+        inicioCola++
+      ];
+
+
+    const x =
+      indice %
+      ancho;
+
+
+    const y =
+      Math.floor(
+        indice /
+        ancho
+      );
+
+
+    if (x > 0) {
+
+      agregar(
+        indice - 1
+      );
+
+    }
+
+
+    if (
+      x <
+      ancho - 1
+    ) {
+
+      agregar(
+        indice + 1
+      );
+
+    }
+
+
+    if (y > 0) {
+
+      agregar(
+        indice -
+        ancho
+      );
+
+    }
+
+
+    if (
+      y <
+      alto - 1
+    ) {
+
+      agregar(
+        indice +
+        ancho
+      );
 
     }
 
   }
 
 
-  /*
-    Suavizado muy pequeño del borde.
-
-    Busca evitar el halo blanco típico
-    sin comerse el producto.
-  */
-
-  const alphaOriginal =
-    new Uint8ClampedArray(total);
+  /* ===========================
+     5. HACER FONDO TRANSPARENTE
+     =========================== */
 
   for (
     let i = 0;
@@ -718,8 +994,39 @@ async function quitarFondoBlanco(file) {
     i++
   ) {
 
-    alphaOriginal[i] =
-      data[i * 4 + 3];
+    if (
+      visitado[i]
+    ) {
+
+      data[
+        i * 4 + 3
+      ] = 0;
+
+    }
+
+  }
+
+
+  /* ===========================
+     6. SUAVIZAR SOLO 1 PÍXEL
+     =========================== */
+
+  const alpha =
+    new Uint8ClampedArray(
+      total
+    );
+
+
+  for (
+    let i = 0;
+    i < total;
+    i++
+  ) {
+
+    alpha[i] =
+      data[
+        i * 4 + 3
+      ];
 
   }
 
@@ -739,57 +1046,61 @@ async function quitarFondoBlanco(file) {
       const i =
         y * ancho + x;
 
-      if (alphaOriginal[i] === 0)
+
+      if (
+        alpha[i] === 0
+      ) {
+
         continue;
 
-
-      const tocaTransparente =
-        alphaOriginal[i - 1] === 0 ||
-        alphaOriginal[i + 1] === 0 ||
-        alphaOriginal[i - ancho] === 0 ||
-        alphaOriginal[i + ancho] === 0;
+      }
 
 
-      if (tocaTransparente) {
-
-        const p = i * 4;
-
-        const r = data[p];
-        const g = data[p + 1];
-        const b = data[p + 2];
-
-        const minimo =
-          Math.min(r, g, b);
-
-        const maximo =
-          Math.max(r, g, b);
+      let transparentes = 0;
 
 
-        /*
-          Solamente suavizamos píxeles
-          extremadamente claros del borde.
-        */
+      if (
+        alpha[i - 1] === 0
+      ) {
+        transparentes++;
+      }
 
-        if (
-          minimo > 235 &&
-          (maximo - minimo) < 22
-        ) {
 
-          const oscuridad =
-            255 - minimo;
+      if (
+        alpha[i + 1] === 0
+      ) {
+        transparentes++;
+      }
 
-          const alpha =
-            Math.max(
-              35,
-              Math.min(
-                255,
-                oscuridad * 14
-              )
-            );
 
-          data[p + 3] = alpha;
+      if (
+        alpha[
+          i - ancho
+        ] === 0
+      ) {
+        transparentes++;
+      }
 
-        }
+
+      if (
+        alpha[
+          i + ancho
+        ] === 0
+      ) {
+        transparentes++;
+      }
+
+
+      if (
+        transparentes > 0
+      ) {
+
+        data[
+          i * 4 + 3
+        ] =
+          transparentes >= 3
+            ? 110
+            : 190;
 
       }
 
@@ -806,24 +1117,34 @@ async function quitarFondoBlanco(file) {
 
 
   return new Promise(
-    function(resolve, reject) {
+    function(
+      resolve,
+      reject
+    ) {
 
       canvas.toBlob(
         function(blob) {
 
           if (blob) {
+
             resolve(blob);
+
           }
+
           else {
+
             reject(
               new Error(
                 "No se pudo crear el PNG."
               )
             );
+
           }
 
         },
+
         "image/png"
+
       );
 
     }
@@ -832,50 +1153,68 @@ async function quitarFondoBlanco(file) {
 }
 
 
-/* PROCESAR */
+/* ======================================
+   PROCESAR IMAGEN
+   ====================================== */
 
 async function procesarImagen(file) {
 
   if (
     !file ||
-    !file.type.startsWith("image/")
+    !file.type.startsWith(
+      "image/"
+    )
   ) {
     return;
   }
 
-  if (procesandoAhora) {
+
+  if (
+    procesandoAhora
+  ) {
     return;
   }
 
 
   procesandoAhora = true;
 
-  mensajeError.textContent = "";
+  mensajeError.textContent =
+    "";
 
-  inicio.style.display = "none";
-  ultimaDescarga.style.display = "none";
-  resultado.style.display = "none";
-  procesando.style.display = "block";
+
+  inicio.style.display =
+    "none";
+
+  ultimaDescarga.style.display =
+    "none";
+
+  resultado.style.display =
+    "none";
+
+  procesando.style.display =
+    "block";
 
 
   try {
 
-    /*
-      Damos un instante al navegador
-      para mostrar la pantalla de proceso.
-    */
-
     await new Promise(
       resolve =>
-        setTimeout(resolve, 30)
+        setTimeout(
+          resolve,
+          30
+        )
     );
 
 
     blobResultado =
-      await quitarFondoBlanco(file);
+      await quitarFondoBlanco(
+        file
+      );
 
 
-    if (urlResultado) {
+    if (
+      urlResultado
+    ) {
 
       URL.revokeObjectURL(
         urlResultado
@@ -900,13 +1239,18 @@ async function procesarImagen(file) {
     resultado.style.display =
       "block";
 
+
     codigo.focus();
 
   }
 
+
   catch(error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
+
 
     procesando.style.display =
       "none";
@@ -914,42 +1258,55 @@ async function procesarImagen(file) {
     inicio.style.display =
       "block";
 
+
     mensajeError.textContent =
       "No pudimos procesar esta imagen.";
 
   }
 
+
   finally {
 
-    procesandoAhora = false;
+    procesandoAhora =
+      false;
 
   }
 
 }
 
 
-/* PEGAR CTRL + V */
+/* ======================================
+   CTRL + V
+   ====================================== */
 
 document.addEventListener(
   "paste",
   function(event) {
 
     const items =
-      event.clipboardData?.items;
+      event.clipboardData
+        ?.items;
 
-    if (!items) return;
+
+    if (!items) {
+      return;
+    }
 
 
-    for (const item of items) {
+    for (
+      const item
+      of items
+    ) {
 
       if (
-        item.type.startsWith("image/")
+        item.type.startsWith(
+          "image/"
+        )
       ) {
 
-        const file =
-          item.getAsFile();
-
-        procesarImagen(file);
+        procesarImagen(
+          item.getAsFile()
+        );
 
         break;
 
@@ -1019,16 +1376,24 @@ inicio.addEventListener(
       "arrastrando"
     );
 
-    const file =
-      event.dataTransfer.files[0];
 
-    procesarImagen(file);
+    const file =
+      event
+        .dataTransfer
+        .files[0];
+
+
+    procesarImagen(
+      file
+    );
 
   }
 );
 
 
-/* CÓDIGO */
+/* ======================================
+   CÓDIGO
+   ====================================== */
 
 codigo.addEventListener(
   "input",
@@ -1041,6 +1406,7 @@ function actualizarNombreDescarga() {
   const valor =
     codigo.value.trim();
 
+
   descargar.textContent =
     valor
       ? "Descargar " +
@@ -1051,43 +1417,67 @@ function actualizarNombreDescarga() {
 }
 
 
-/* CREAR MINIATURA */
+/* ======================================
+   MINIATURA
+   ====================================== */
 
 async function crearMiniatura(blob) {
 
   const bitmap =
-    await createImageBitmap(blob);
+    await createImageBitmap(
+      blob
+    );
 
-  const max = 180;
+
+  const max =
+    180;
+
 
   const escala =
     Math.min(
-      max / bitmap.width,
-      max / bitmap.height,
+
+      max /
+      bitmap.width,
+
+      max /
+      bitmap.height,
+
       1
+
     );
 
+
   const canvas =
-    document.createElement("canvas");
+    document.createElement(
+      "canvas"
+    );
+
 
   canvas.width =
     Math.max(
       1,
       Math.round(
-        bitmap.width * escala
+        bitmap.width *
+        escala
       )
     );
+
 
   canvas.height =
     Math.max(
       1,
       Math.round(
-        bitmap.height * escala
+        bitmap.height *
+        escala
       )
     );
 
+
   const ctx =
-    canvas.getContext("2d");
+    canvas.getContext(
+      "2d"
+    );
+
 
   ctx.drawImage(
     bitmap,
@@ -1097,12 +1487,9 @@ async function crearMiniatura(blob) {
     canvas.height
   );
 
+
   bitmap.close();
 
-  /*
-    WebP mantiene transparencia
-    y ocupa mucho menos espacio.
-  */
 
   return canvas.toDataURL(
     "image/webp",
@@ -1112,7 +1499,9 @@ async function crearMiniatura(blob) {
 }
 
 
-/* ÚLTIMA DESCARGA */
+/* ======================================
+   ÚLTIMA DESCARGA
+   ====================================== */
 
 async function guardarUltimaDescarga(
   blob,
@@ -1122,17 +1511,22 @@ async function guardarUltimaDescarga(
   try {
 
     const miniatura =
-      await crearMiniatura(blob);
+      await crearMiniatura(
+        blob
+      );
+
 
     localStorage.setItem(
       "ximcut_ultima_imagen",
       miniatura
     );
 
+
     localStorage.setItem(
       "ximcut_ultimo_codigo",
       nombre
     );
+
 
     mostrarUltimaDescarga(
       miniatura,
@@ -1140,6 +1534,7 @@ async function guardarUltimaDescarga(
     );
 
   }
+
 
   catch(error) {
 
@@ -1158,15 +1553,21 @@ function mostrarUltimaDescarga(
   nombre
 ) {
 
-  if (!imagen || !nombre) {
+  if (
+    !imagen ||
+    !nombre
+  ) {
     return;
   }
+
 
   ultimaImagen.src =
     imagen;
 
+
   ultimoCodigo.textContent =
     nombre;
+
 
   ultimaDescarga.style.display =
     "block";
@@ -1181,12 +1582,17 @@ function cargarUltimaDescarga() {
       "ximcut_ultima_imagen"
     );
 
+
   const nombre =
     localStorage.getItem(
       "ximcut_ultimo_codigo"
     );
 
-  if (imagen && nombre) {
+
+  if (
+    imagen &&
+    nombre
+  ) {
 
     mostrarUltimaDescarga(
       imagen,
@@ -1197,14 +1603,19 @@ function cargarUltimaDescarga() {
 
 }
 
+
 cargarUltimaDescarga();
 
 
-/* DESCARGAR */
+/* ======================================
+   DESCARGAR
+   ====================================== */
 
 async function descargarImagen() {
 
-  if (!blobResultado) {
+  if (
+    !blobResultado
+  ) {
     return;
   }
 
@@ -1218,6 +1629,7 @@ async function descargarImagen() {
     mensajeError.textContent =
       "Ingresá el código del producto antes de descargar.";
 
+
     codigo.focus();
 
     return;
@@ -1225,16 +1637,13 @@ async function descargarImagen() {
   }
 
 
-  mensajeError.textContent = "";
+  mensajeError.textContent =
+    "";
+
 
   const nombre =
     valor + ".png";
 
-
-  /*
-    Guardamos la miniatura ANTES
-    de limpiar el resultado.
-  */
 
   await guardarUltimaDescarga(
     blobResultado,
@@ -1247,13 +1656,25 @@ async function descargarImagen() {
       blobResultado
     );
 
+
   const enlace =
-    document.createElement("a");
+    document.createElement(
+      "a"
+    );
 
-  enlace.href = url;
-  enlace.download = nombre;
 
-  document.body.appendChild(enlace);
+  enlace.href =
+    url;
+
+
+  enlace.download =
+    nombre;
+
+
+  document.body.appendChild(
+    enlace
+  );
+
 
   enlace.click();
 
@@ -1263,7 +1684,10 @@ async function descargarImagen() {
   setTimeout(
     function() {
 
-      URL.revokeObjectURL(url);
+      URL.revokeObjectURL(
+        url
+      );
+
 
       reiniciar();
 
@@ -1280,13 +1704,16 @@ descargar.addEventListener(
 );
 
 
-/* ENTER = DESCARGAR */
+/* ENTER DESCARGA */
 
 codigo.addEventListener(
   "keydown",
   function(event) {
 
-    if (event.key === "Enter") {
+    if (
+      event.key ===
+      "Enter"
+    ) {
 
       event.preventDefault();
 
@@ -1298,15 +1725,21 @@ codigo.addEventListener(
 );
 
 
-/* COPIAR */
+/* ======================================
+   COPIAR
+   ====================================== */
 
 copiar.addEventListener(
   "click",
   async function() {
 
-    mensajeError.textContent = "";
+    mensajeError.textContent =
+      "";
 
-    if (!blobResultado) {
+
+    if (
+      !blobResultado
+    ) {
       return;
     }
 
@@ -1315,23 +1748,34 @@ copiar.addEventListener(
 
       const pngBlob =
         new Blob(
+
           [
             await blobResultado
               .arrayBuffer()
           ],
+
           {
-            type: "image/png"
+            type:
+              "image/png"
           }
+
         );
 
 
-      await navigator.clipboard.write(
-        [
-          new ClipboardItem({
-            "image/png": pngBlob
-          })
-        ]
-      );
+      await navigator
+        .clipboard
+        .write(
+
+          [
+            new ClipboardItem(
+              {
+                "image/png":
+                  pngBlob
+              }
+            )
+          ]
+
+        );
 
 
       copiar.textContent =
@@ -1350,9 +1794,13 @@ copiar.addEventListener(
 
     }
 
+
     catch(error) {
 
-      console.error(error);
+      console.error(
+        error
+      );
+
 
       mensajeError.textContent =
         "Chrome bloqueó la copia automática. Podés descargar el PNG.";
@@ -1363,38 +1811,55 @@ copiar.addEventListener(
 );
 
 
-/* REINICIAR */
+/* ======================================
+   REINICIAR
+   ====================================== */
 
 function reiniciar() {
 
   resultado.style.display =
     "none";
 
+
   procesando.style.display =
     "none";
+
 
   inicio.style.display =
     "block";
 
-  archivo.value = "";
 
-  codigo.value = "";
+  archivo.value =
+    "";
 
-  blobResultado = null;
 
-  mensajeError.textContent = "";
+  codigo.value =
+    "";
+
+
+  blobResultado =
+    null;
+
+
+  mensajeError.textContent =
+    "";
+
 
   descargar.textContent =
     "Descargar PNG";
 
 
-  if (urlResultado) {
+  if (
+    urlResultado
+  ) {
 
     URL.revokeObjectURL(
       urlResultado
     );
 
-    urlResultado = null;
+
+    urlResultado =
+      null;
 
   }
 
@@ -1404,13 +1869,17 @@ function reiniciar() {
       "ximcut_ultima_imagen"
     );
 
+
   const nombre =
     localStorage.getItem(
       "ximcut_ultimo_codigo"
     );
 
 
-  if (imagen && nombre) {
+  if (
+    imagen &&
+    nombre
+  ) {
 
     mostrarUltimaDescarga(
       imagen,
