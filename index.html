@@ -6,6 +6,15 @@
 
 <title>XimCut</title>
 
+<!-- FAVICON: X rosa -->
+<link rel="icon" href="data:image/svg+xml,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+<rect width='100' height='100' rx='24' fill='%23e88ba7'/>
+<text x='50' y='69' text-anchor='middle'
+font-family='Arial' font-size='58' font-weight='700'
+fill='white'>X</text>
+</svg>">
+
 <style>
 * {
   box-sizing: border-box;
@@ -45,15 +54,15 @@ body {
   margin-bottom: 35px;
 }
 
-/* ZONA INICIAL */
+/* INICIO */
 
 .zona {
   background: #ffffff;
   border: 2px dashed #edc6d1;
   border-radius: 22px;
   padding: 65px 30px;
-  box-shadow: 0 8px 30px rgba(190, 120, 145, 0.08);
-  transition: 0.2s;
+  box-shadow: 0 8px 30px rgba(190,120,145,.08);
+  transition: .2s;
 }
 
 .zona.arrastrando {
@@ -85,7 +94,7 @@ button {
   font-size: 16px;
   cursor: pointer;
   font-weight: 600;
-  transition: 0.2s;
+  transition: .2s;
 }
 
 .boton-principal {
@@ -108,25 +117,21 @@ button {
   background: white;
   border-radius: 22px;
   padding: 55px 30px;
-  box-shadow: 0 8px 30px rgba(190, 120, 145, 0.08);
+  box-shadow: 0 8px 30px rgba(190,120,145,.08);
 }
 
 .spinner {
   width: 55px;
   height: 55px;
   margin: 0 auto 25px;
-
   border: 5px solid #f5dce3;
   border-top-color: #e88ba7;
   border-radius: 50%;
-
-  animation: girar 0.8s linear infinite;
+  animation: girar .8s linear infinite;
 }
 
 @keyframes girar {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 #estado {
@@ -154,7 +159,7 @@ button {
   height: 100%;
   width: 5%;
   background: #e88ba7;
-  transition: width 0.3s ease;
+  transition: width .3s ease;
 }
 
 /* RESULTADO */
@@ -167,15 +172,13 @@ button {
   background: white;
   border-radius: 22px;
   padding: 35px;
-  box-shadow: 0 8px 30px rgba(190, 120, 145, 0.08);
+  box-shadow: 0 8px 30px rgba(190,120,145,.08);
 }
 
 .resultado-card h2 {
   margin-top: 0;
   margin-bottom: 25px;
 }
-
-/* CUADRICULADO TRANSPARENCIA */
 
 .checker {
   max-width: 560px;
@@ -184,17 +187,17 @@ button {
   background-color: white;
 
   background-image:
-    linear-gradient(45deg, #f3e7eb 25%, transparent 25%),
-    linear-gradient(-45deg, #f3e7eb 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #f3e7eb 75%),
-    linear-gradient(-45deg, transparent 75%, #f3e7eb 75%);
+    linear-gradient(45deg,#f3e7eb 25%,transparent 25%),
+    linear-gradient(-45deg,#f3e7eb 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#f3e7eb 75%),
+    linear-gradient(-45deg,transparent 75%,#f3e7eb 75%);
 
   background-size: 24px 24px;
   background-position:
     0 0,
     0 12px,
     12px -12px,
-    -12px 0px;
+    -12px 0;
 
   border-radius: 14px;
   overflow: hidden;
@@ -225,22 +228,19 @@ button {
 #codigo {
   width: 100%;
   padding: 14px 15px;
-
   border: 1px solid #e4d5da;
   border-radius: 10px;
-
   font-size: 17px;
   outline: none;
-
-  background: #fff;
+  background: white;
 }
 
 #codigo:focus {
   border-color: #e88ba7;
-  box-shadow: 0 0 0 3px rgba(232, 139, 167, 0.12);
+  box-shadow: 0 0 0 3px rgba(232,139,167,.12);
 }
 
-/* BOTONES */
+/* ACCIONES */
 
 .acciones {
   display: flex;
@@ -274,14 +274,68 @@ button {
   border: 1px solid #ddd;
 }
 
-.nueva:hover {
-  background: #fafafa;
-}
-
 .error {
   color: #b00020;
   margin-top: 18px;
   font-size: 14px;
+}
+
+/* ULTIMA DESCARGA */
+
+#ultimaDescarga {
+  display: none;
+  margin: 28px auto 0;
+  max-width: 220px;
+}
+
+.ultima-titulo {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+.ultima-card {
+  background: white;
+  border: 1px solid #f0e2e7;
+  border-radius: 15px;
+  padding: 12px;
+  box-shadow: 0 5px 18px rgba(190,120,145,.06);
+}
+
+.ultima-preview {
+  width: 100%;
+  height: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+
+  background-color: white;
+
+  background-image:
+    linear-gradient(45deg,#f7eef1 25%,transparent 25%),
+    linear-gradient(-45deg,#f7eef1 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#f7eef1 75%),
+    linear-gradient(-45deg,transparent 75%,#f7eef1 75%);
+
+  background-size: 18px 18px;
+  background-position:
+    0 0,
+    0 9px,
+    9px -9px,
+    -9px 0;
+}
+
+#ultimaImagen {
+  max-width: 100%;
+  max-height: 115px;
+}
+
+#ultimoCodigo {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
 }
 
 /* MOVIL */
@@ -318,7 +372,6 @@ button {
     Pegá una imagen y obtenela sin fondo.
   </div>
 
-
   <!-- INICIO -->
 
   <section id="inicio" class="zona">
@@ -345,6 +398,27 @@ button {
       id="archivo"
       accept="image/png,image/jpeg,image/webp"
     >
+
+  </section>
+
+
+  <!-- ULTIMA DESCARGA -->
+
+  <section id="ultimaDescarga">
+
+    <div class="ultima-titulo">
+      Última descarga
+    </div>
+
+    <div class="ultima-card">
+
+      <div class="ultima-preview">
+        <img id="ultimaImagen">
+      </div>
+
+      <div id="ultimoCodigo"></div>
+
+    </div>
 
   </section>
 
@@ -382,7 +456,6 @@ button {
         <img id="imagenResultado">
       </div>
 
-
       <div class="codigo-area">
 
         <label for="codigo">
@@ -392,13 +465,11 @@ button {
         <input
           id="codigo"
           type="text"
-          inputmode="numeric"
           autocomplete="off"
           placeholder="Ej. 110755"
         >
 
       </div>
-
 
       <div class="acciones">
 
@@ -484,13 +555,22 @@ const codigo =
 const mensajeError =
   document.getElementById("mensajeError");
 
+const ultimaDescarga =
+  document.getElementById("ultimaDescarga");
+
+const ultimaImagen =
+  document.getElementById("ultimaImagen");
+
+const ultimoCodigo =
+  document.getElementById("ultimoCodigo");
+
 
 let blobResultado = null;
 let urlResultado = null;
 let procesandoAhora = false;
 
 
-/* CONFIGURACION DE XIMCUT */
+/* CONFIGURACION */
 
 const config = {
 
@@ -505,31 +585,29 @@ const config = {
     quality: 1
   },
 
-  progress: function(key, current, total) {
-
-    /*
-      El callback también se utiliza cuando
-      se descargan archivos del modelo.
-    */
+  progress: function(key,current,total) {
 
     if (!procesandoAhora) return;
 
-    if (key.includes("compute")) {
+    let porcentaje = 15;
 
-      let porcentaje = 15;
-
-      if (total && total > 0) {
-        porcentaje =
-          Math.round((current / total) * 85) + 10;
-      }
+    if (total && total > 0) {
 
       porcentaje =
-        Math.max(10, Math.min(95, porcentaje));
+        Math.round(
+          (current / total) * 80
+        ) + 10;
 
-      progreso.style.width =
-        porcentaje + "%";
     }
 
+    porcentaje =
+      Math.max(
+        10,
+        Math.min(95,porcentaje)
+      );
+
+    progreso.style.width =
+      porcentaje + "%";
 
     if (key.includes("inference")) {
 
@@ -557,7 +635,7 @@ const config = {
 };
 
 
-/* PRECARGAR IA */
+/* PRECARGA */
 
 async function prepararXimCut() {
 
@@ -565,21 +643,12 @@ async function prepararXimCut() {
 
     await preload(config);
 
-    console.log(
-      "XimCut listo para procesar imágenes."
-    );
-
   }
 
-  catch (error) {
-
-    /*
-      Si WebGPU no funciona en el equipo,
-      no bloqueamos la página.
-    */
+  catch(error) {
 
     console.log(
-      "La precarga con GPU no pudo completarse.",
+      "Precarga no disponible.",
       error
     );
 
@@ -590,21 +659,17 @@ async function prepararXimCut() {
 prepararXimCut();
 
 
-/* PROCESAR IMAGEN */
+/* PROCESAR */
 
 async function procesarImagen(file) {
 
   if (
     !file ||
     !file.type.startsWith("image/")
-  ) {
-    return;
-  }
+  ) return;
 
 
-  if (procesandoAhora) {
-    return;
-  }
+  if (procesandoAhora) return;
 
 
   procesandoAhora = true;
@@ -613,9 +678,13 @@ async function procesarImagen(file) {
 
   inicio.style.display = "none";
 
+  ultimaDescarga.style.display =
+    "none";
+
   resultado.style.display = "none";
 
-  procesando.style.display = "block";
+  procesando.style.display =
+    "block";
 
   progreso.style.width = "8%";
 
@@ -635,9 +704,8 @@ async function procesarImagen(file) {
       );
 
 
-    progreso.style.width = "100%";
-
-    detalle.textContent = "¡Listo!";
+    progreso.style.width =
+      "100%";
 
 
     if (urlResultado) {
@@ -669,21 +737,14 @@ async function procesarImagen(file) {
 
       codigo.focus();
 
-    }, 250);
+    },250);
 
 
   }
 
-  catch (error) {
+  catch(error) {
 
     console.error(error);
-
-
-    /*
-      Si GPU da problema, mostramos
-      un mensaje claro en vez de romper
-      toda la página.
-    */
 
     estado.textContent =
       "No pudimos procesar esta imagen.";
@@ -705,7 +766,7 @@ async function procesarImagen(file) {
 }
 
 
-/* PEGAR CON CTRL + V */
+/* CTRL + V */
 
 document.addEventListener(
   "paste",
@@ -723,10 +784,9 @@ document.addEventListener(
         item.type.startsWith("image/")
       ) {
 
-        const file =
-          item.getAsFile();
-
-        procesarImagen(file);
+        procesarImagen(
+          item.getAsFile()
+        );
 
         break;
 
@@ -738,7 +798,7 @@ document.addEventListener(
 );
 
 
-/* ELEGIR ARCHIVO */
+/* ARCHIVO */
 
 archivo.addEventListener(
   "change",
@@ -796,41 +856,203 @@ inicio.addEventListener(
       "arrastrando"
     );
 
-    const file =
-      event.dataTransfer.files[0];
-
-    procesarImagen(file);
+    procesarImagen(
+      event.dataTransfer.files[0]
+    );
 
   }
 );
 
 
-/* ACTUALIZAR NOMBRE DEL BOTON */
+/* NOMBRE DESCARGA */
 
 codigo.addEventListener(
   "input",
-  actualizarNombreDescarga
+  function() {
+
+    const valor =
+      codigo.value.trim();
+
+    descargar.textContent =
+      valor
+        ? "Descargar " +
+          valor +
+          ".png"
+        : "Descargar PNG";
+
+  }
 );
 
 
-function actualizarNombreDescarga() {
+/* GUARDAR MINIATURA LOCAL */
 
-  const valor =
-    codigo.value.trim();
+function guardarUltimaDescarga(
+  blob,
+  nombre
+) {
 
-  if (valor) {
+  const lector =
+    new FileReader();
 
-    descargar.textContent =
-      "Descargar " +
-      valor +
-      ".png";
+
+  lector.onloadend =
+    function() {
+
+      try {
+
+        localStorage.setItem(
+          "ximcut_ultima_imagen",
+          lector.result
+        );
+
+        localStorage.setItem(
+          "ximcut_ultimo_codigo",
+          nombre
+        );
+
+      }
+
+      catch(error) {
+
+        console.log(
+          "No se pudo guardar la miniatura.",
+          error
+        );
+
+      }
+
+
+      mostrarUltimaDescarga(
+        lector.result,
+        nombre
+      );
+
+    };
+
+
+  lector.readAsDataURL(blob);
+
+}
+
+
+/* MOSTRAR ULTIMA */
+
+function mostrarUltimaDescarga(
+  imagen,
+  nombre
+) {
+
+  if (
+    !imagen ||
+    !nombre
+  ) return;
+
+
+  ultimaImagen.src =
+    imagen;
+
+  ultimoCodigo.textContent =
+    nombre;
+
+  ultimaDescarga.style.display =
+    "block";
+
+}
+
+
+/* CARGAR ULTIMA AL ABRIR */
+
+function cargarUltimaDescarga() {
+
+  const imagen =
+    localStorage.getItem(
+      "ximcut_ultima_imagen"
+    );
+
+  const nombre =
+    localStorage.getItem(
+      "ximcut_ultimo_codigo"
+    );
+
+
+  if (
+    imagen &&
+    nombre
+  ) {
+
+    mostrarUltimaDescarga(
+      imagen,
+      nombre
+    );
 
   }
 
-  else {
+}
 
-    descargar.textContent =
-      "Descargar PNG";
+cargarUltimaDescarga();
+
+
+/* REINICIAR */
+
+function reiniciar() {
+
+  resultado.style.display =
+    "none";
+
+  procesando.style.display =
+    "none";
+
+  inicio.style.display =
+    "block";
+
+
+  archivo.value = "";
+
+  codigo.value = "";
+
+  blobResultado = null;
+
+  progreso.style.width =
+    "5%";
+
+  mensajeError.textContent =
+    "";
+
+  descargar.textContent =
+    "Descargar PNG";
+
+
+  if (urlResultado) {
+
+    URL.revokeObjectURL(
+      urlResultado
+    );
+
+    urlResultado = null;
+
+  }
+
+
+  const imagen =
+    localStorage.getItem(
+      "ximcut_ultima_imagen"
+    );
+
+  const nombre =
+    localStorage.getItem(
+      "ximcut_ultimo_codigo"
+    );
+
+
+  if (
+    imagen &&
+    nombre
+  ) {
+
+    mostrarUltimaDescarga(
+      imagen,
+      nombre
+    );
 
   }
 
@@ -848,10 +1070,20 @@ function descargarImagen() {
     codigo.value.trim();
 
 
+  if (!valor) {
+
+    mensajeError.textContent =
+      "Ingresá el código del producto antes de descargar.";
+
+    codigo.focus();
+
+    return;
+
+  }
+
+
   const nombre =
-    valor
-      ? valor + ".png"
-      : "imagen-sin-fondo.png";
+    valor + ".png";
 
 
   const url =
@@ -871,13 +1103,21 @@ function descargarImagen() {
   enlace.click();
 
 
+  guardarUltimaDescarga(
+    blobResultado,
+    nombre
+  );
+
+
   setTimeout(
     function() {
 
       URL.revokeObjectURL(url);
 
+      reiniciar();
+
     },
-    1000
+    350
   );
 
 }
@@ -889,7 +1129,7 @@ descargar.addEventListener(
 );
 
 
-/* ENTER EN CODIGO = DESCARGAR */
+/* ENTER = DESCARGAR */
 
 codigo.addEventListener(
   "keydown",
@@ -909,7 +1149,7 @@ codigo.addEventListener(
 );
 
 
-/* COPIAR PNG */
+/* COPIAR */
 
 copiar.addEventListener(
   "click",
@@ -937,12 +1177,10 @@ copiar.addEventListener(
 
       await navigator.clipboard.write(
         [
-          new ClipboardItem(
-            {
-              "image/png":
-                pngBlob
-            }
-          )
+          new ClipboardItem({
+            "image/png":
+              pngBlob
+          })
         ]
       );
 
@@ -964,58 +1202,17 @@ copiar.addEventListener(
 
     }
 
-    catch (error) {
+    catch(error) {
 
       console.error(error);
 
       mensajeError.textContent =
-        "Chrome bloqueó la copia automática. Podés usar Descargar PNG.";
+        "Chrome bloqueó la copia automática.";
 
     }
 
   }
 );
-
-
-/* NUEVA IMAGEN */
-
-function reiniciar() {
-
-  resultado.style.display =
-    "none";
-
-  procesando.style.display =
-    "none";
-
-  inicio.style.display =
-    "block";
-
-
-  archivo.value = "";
-
-  codigo.value = "";
-
-  blobResultado = null;
-
-  progreso.style.width = "5%";
-
-  mensajeError.textContent = "";
-
-  descargar.textContent =
-    "Descargar PNG";
-
-
-  if (urlResultado) {
-
-    URL.revokeObjectURL(
-      urlResultado
-    );
-
-    urlResultado = null;
-
-  }
-
-}
 
 
 nueva.addEventListener(
