@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XimCut – Prueba GrabCut</title>
+
+<title>XimCut – IA</title>
 
 <style>
 *{box-sizing:border-box}
@@ -19,29 +20,36 @@ body{
   width:100%;
   max-width:900px;
   margin:auto;
-  padding:50px 20px;
+  padding:55px 20px;
   text-align:center;
 }
 
 .logo{
-  font-size:44px;
+  font-size:46px;
   font-weight:800;
   letter-spacing:-2px;
+  margin-bottom:8px;
 }
 
 .logo span{color:#e88ba7}
 
 .subtitulo{
   color:#777;
-  margin:8px 0 35px;
+  font-size:17px;
+  margin-bottom:35px;
+}
+
+.zona,
+#procesando,
+.resultado-card{
+  background:white;
+  border-radius:22px;
+  padding:55px 30px;
+  box-shadow:0 8px 30px rgba(190,120,145,.08);
 }
 
 .zona{
-  background:#fff;
   border:2px dashed #edc6d1;
-  border-radius:22px;
-  padding:60px 25px;
-  box-shadow:0 8px 30px rgba(190,120,145,.08);
 }
 
 .zona h2{margin-top:0}
@@ -56,10 +64,18 @@ button{
   border-radius:11px;
   padding:14px 24px;
   font-size:16px;
-  font-weight:600;
   cursor:pointer;
+  font-weight:600;
+}
+
+.principal{
   background:#e88ba7;
-  color:#fff;
+  color:white;
+}
+
+.secundario{
+  background:#f7e9ed;
+  color:#8f5366;
 }
 
 #archivo{display:none}
@@ -69,16 +85,10 @@ button{
   display:none;
 }
 
-#procesando{
-  background:#fff;
-  border-radius:22px;
-  padding:55px 25px;
-}
-
 .spinner{
-  width:52px;
-  height:52px;
-  margin:0 auto 20px;
+  width:55px;
+  height:55px;
+  margin:0 auto 25px;
   border:5px solid #f5dce3;
   border-top-color:#e88ba7;
   border-radius:50%;
@@ -89,18 +99,28 @@ button{
   to{transform:rotate(360deg)}
 }
 
-.resultado-card{
-  background:#fff;
-  border-radius:22px;
-  padding:35px;
-  box-shadow:0 8px 30px rgba(190,120,145,.08);
+#estado{
+  font-size:21px;
+  font-weight:700;
+}
+
+#detalle{
+  margin-top:10px;
+  color:#888;
+}
+
+#tiempo{
+  margin-top:12px;
+  font-size:14px;
+  color:#e88ba7;
+  font-weight:600;
 }
 
 .checker{
   max-width:600px;
   margin:25px auto;
 
-  background-color:#fff;
+  background-color:white;
 
   background-image:
   linear-gradient(45deg,#f3e7eb 25%,transparent 25%),
@@ -120,28 +140,29 @@ button{
   overflow:hidden;
 }
 
-#salida{
+#imagenResultado{
   max-width:100%;
   max-height:600px;
   display:block;
   margin:auto;
 }
 
-.secundario{
-  background:#f7e9ed;
-  color:#8f5366;
-  margin-left:8px;
+.acciones{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+#motor{
+  margin-top:18px;
+  font-size:13px;
+  color:#999;
 }
 
 #error{
   color:#b00020;
   margin-top:18px;
-}
-
-.aviso{
-  margin-top:18px;
-  font-size:13px;
-  color:#999;
 }
 </style>
 </head>
@@ -155,20 +176,23 @@ Xim<span>Cut</span>
 </div>
 
 <div class="subtitulo">
-Prueba de nuevo motor
+Prueba IA – precisión + velocidad
 </div>
 
 
 <section id="inicio" class="zona">
 
-<h2>Probemos el Uriage 👀</h2>
+<h2>Pegá una imagen</h2>
 
 <p>
-Pegá la imagen con <strong>Ctrl + V</strong><br>
-o elegila desde tu computadora.
+Copiá la imagen del producto y presioná
+<strong>Ctrl + V</strong>.
 </p>
 
-<button onclick="archivo.click()">
+<button
+class="principal"
+onclick="archivo.click()"
+>
 Elegir imagen
 </button>
 
@@ -178,8 +202,8 @@ type="file"
 accept="image/*"
 >
 
-<div class="aviso" id="estadoOpenCV">
-Preparando motor...
+<div id="motor">
+Preparando IA...
 </div>
 
 </section>
@@ -189,11 +213,17 @@ Preparando motor...
 
 <div class="spinner"></div>
 
-<h2>Procesando...</h2>
+<div id="estado">
+Quitando fondo...
+</div>
 
-<p id="detalle">
-Analizando producto y fondo.
-</p>
+<div id="detalle">
+La IA está identificando el producto.
+</div>
+
+<div id="tiempo">
+0.0 s
+</div>
 
 </section>
 
@@ -202,13 +232,20 @@ Analizando producto y fondo.
 
 <div class="resultado-card">
 
-<h2>Resultado de prueba</h2>
+<h2>¡Listo!</h2>
 
 <div class="checker">
-<canvas id="salida"></canvas>
+<img id="imagenResultado">
 </div>
 
-<button id="descargar">
+<div id="tiempoFinal"></div>
+
+<div class="acciones">
+
+<button
+class="principal"
+id="descargar"
+>
 Descargar prueba
 </button>
 
@@ -219,6 +256,8 @@ id="otra"
 Probar otra
 </button>
 
+</div>
+
 <div id="error"></div>
 
 </div>
@@ -228,10 +267,14 @@ Probar otra
 </main>
 
 
-<script>
+<script type="module">
 
-let cvListo = false;
-let procesandoAhora = false;
+import {
+  removeBackground,
+  preload
+}
+from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm";
+
 
 const inicio =
 document.getElementById("inicio");
@@ -245,266 +288,193 @@ document.getElementById("resultado");
 const archivo =
 document.getElementById("archivo");
 
-const salida =
-document.getElementById("salida");
+const imagenResultado =
+document.getElementById("imagenResultado");
+
+const motor =
+document.getElementById("motor");
+
+const tiempo =
+document.getElementById("tiempo");
+
+const tiempoFinal =
+document.getElementById("tiempoFinal");
 
 const error =
 document.getElementById("error");
 
-const estadoOpenCV =
-document.getElementById("estadoOpenCV");
+
+let blobResultado = null;
+let urlResultado = null;
+let trabajando = false;
+let intervalo = null;
 
 
-function esperarOpenCV(){
+/* ===============================
+   CONFIGURACIÓN
+   =============================== */
 
-  if(
-    typeof cv !== "undefined" &&
-    cv.Mat
-  ){
+const config = {
 
-    cvListo = true;
+  device:"gpu",
 
-    estadoOpenCV.textContent =
-    "✓ Motor listo";
+  model:"isnet_fp16",
 
-    return;
+  proxyToWorker:true,
+
+  debug:false,
+
+  output:{
+    format:"image/png",
+    quality:1,
+    type:"foreground"
+  },
+
+  progress:function(key,current,total){
+
+    if(
+      key.includes("fetch") &&
+      total > 0
+    ){
+
+      const porcentaje =
+      Math.round(
+        current / total * 100
+      );
+
+      motor.textContent =
+      "Preparando IA: " +
+      porcentaje +
+      "%";
+
+    }
+
   }
 
-  setTimeout(
-    esperarOpenCV,
-    200
-  );
+};
+
+
+/* ===============================
+   PRECARGAR
+   =============================== */
+
+async function prepararMotor(){
+
+  try{
+
+    motor.textContent =
+    "Preparando IA...";
+
+    await preload(config);
+
+    motor.textContent =
+    "✓ IA lista";
+
+  }
+
+  catch(e){
+
+    console.error(e);
+
+    motor.textContent =
+    "La IA se cargará al pegar la imagen.";
+
+  }
+
 }
 
-esperarOpenCV();
+prepararMotor();
 
+
+/* ===============================
+   PROCESAR
+   =============================== */
 
 async function procesar(file){
 
   if(!file) return;
 
-  if(!cvListo){
+  if(trabajando) return;
 
-    alert(
-      "El motor todavía se está preparando. Esperá unos segundos."
-    );
+  trabajando = true;
 
-    return;
-  }
+  error.textContent = "";
 
-  if(procesandoAhora) return;
+  inicio.style.display =
+  "none";
 
-  procesandoAhora = true;
+  resultado.style.display =
+  "none";
 
-  inicio.style.display = "none";
-  resultado.style.display = "none";
-  procesando.style.display = "block";
+  procesando.style.display =
+  "block";
+
+
+  const comienzo =
+  performance.now();
+
+
+  intervalo =
+  setInterval(function(){
+
+    const segundos =
+    (
+      (
+        performance.now() -
+        comienzo
+      ) / 1000
+    ).toFixed(1);
+
+    tiempo.textContent =
+    segundos + " s";
+
+  },100);
+
 
   try{
 
-    const bitmap =
-    await createImageBitmap(file);
-
-    /*
-      Trabajamos a una resolución máxima
-      razonable para mantener buena velocidad.
-    */
-
-    const maximo = 900;
-
-    const escala =
-    Math.min(
-      maximo / bitmap.width,
-      maximo / bitmap.height,
-      1
-    );
-
-    const ancho =
-    Math.round(
-      bitmap.width * escala
-    );
-
-    const alto =
-    Math.round(
-      bitmap.height * escala
+    blobResultado =
+    await removeBackground(
+      file,
+      config
     );
 
 
-    const temporal =
-    document.createElement("canvas");
-
-    temporal.width = ancho;
-    temporal.height = alto;
-
-    const tctx =
-    temporal.getContext("2d");
-
-    tctx.drawImage(
-      bitmap,
-      0,
-      0,
-      ancho,
-      alto
-    );
-
-    bitmap.close();
+    clearInterval(intervalo);
 
 
-    let src =
-    cv.imread(temporal);
-
-    /*
-      GrabCut necesita RGB.
-    */
-
-    let rgb =
-    new cv.Mat();
-
-    cv.cvtColor(
-      src,
-      rgb,
-      cv.COLOR_RGBA2RGB
-    );
-
-
-    let mascara =
-    new cv.Mat(
-      rgb.rows,
-      rgb.cols,
-      cv.CV_8UC1,
-      new cv.Scalar(
-        cv.GC_BGD
-      )
-    );
-
-
-    /*
-      En vez de asumir simplemente
-      "todo el centro es producto",
-      marcamos un borde exterior
-      como fondo seguro.
-    */
-
-    const margen =
-    Math.max(
-      3,
-      Math.round(
-        Math.min(
-          ancho,
-          alto
-        ) * 0.025
-      )
-    );
-
-
-    /*
-      Zona central:
-      posible primer plano.
-    */
-
-    const rect =
-    new cv.Rect(
-      margen,
-      margen,
-      ancho - margen * 2,
-      alto - margen * 2
-    );
-
-
-    let bgdModel =
-    new cv.Mat();
-
-    let fgdModel =
-    new cv.Mat();
-
-
-    /*
-      5 iteraciones suele dar
-      un equilibrio razonable
-      entre calidad y velocidad.
-    */
-
-    cv.grabCut(
-      rgb,
-      mascara,
-      rect,
-      bgdModel,
-      fgdModel,
-      5,
-      cv.GC_INIT_WITH_RECT
-    );
-
-
-    /*
-      Creamos PNG transparente.
-    */
-
-    const original =
-    tctx.getImageData(
-      0,
-      0,
-      ancho,
-      alto
-    );
-
-    const pixeles =
-    original.data;
-
-    const maskData =
-    mascara.data;
-
-
-    for(
-      let i = 0;
-      i < maskData.length;
-      i++
-    ){
-
-      const clase =
-      maskData[i];
-
-      /*
-        GC_FGD = primer plano seguro
-        GC_PR_FGD = primer plano probable
-
-        Ambos se conservan.
-      */
-
-      const conservar =
+    const segundos =
+    (
       (
-        clase === cv.GC_FGD ||
-        clase === cv.GC_PR_FGD
+        performance.now() -
+        comienzo
+      ) / 1000
+    ).toFixed(1);
+
+
+    if(urlResultado){
+
+      URL.revokeObjectURL(
+        urlResultado
       );
-
-
-      pixeles[
-        i * 4 + 3
-      ] =
-      conservar
-      ? 255
-      : 0;
 
     }
 
 
-    salida.width = ancho;
-    salida.height = alto;
-
-    const sctx =
-    salida.getContext("2d");
-
-    sctx.putImageData(
-      original,
-      0,
-      0
+    urlResultado =
+    URL.createObjectURL(
+      blobResultado
     );
 
 
-    src.delete();
-    rgb.delete();
-    mascara.delete();
-    bgdModel.delete();
-    fgdModel.delete();
+    imagenResultado.src =
+    urlResultado;
+
+
+    tiempoFinal.textContent =
+    "Procesada en " +
+    segundos +
+    " segundos";
 
 
     procesando.style.display =
@@ -517,6 +487,8 @@ async function procesar(file){
 
   catch(e){
 
+    clearInterval(intervalo);
+
     console.error(e);
 
     procesando.style.display =
@@ -526,20 +498,22 @@ async function procesar(file){
     "block";
 
     error.textContent =
-    "La prueba no pudo procesar esta imagen.";
+    "No se pudo procesar la imagen.";
 
   }
 
   finally{
 
-    procesandoAhora = false;
+    trabajando = false;
 
   }
 
 }
 
 
-/* CTRL + V */
+/* ===============================
+   CTRL + V
+   =============================== */
 
 document.addEventListener(
 "paste",
@@ -550,6 +524,7 @@ function(event){
 
   if(!items) return;
 
+
   for(const item of items){
 
     if(
@@ -558,9 +533,10 @@ function(event){
       )
     ){
 
-      procesar(
-        item.getAsFile()
-      );
+      const file =
+      item.getAsFile();
+
+      procesar(file);
 
       break;
 
@@ -571,7 +547,9 @@ function(event){
 });
 
 
-/* ARCHIVO */
+/* ===============================
+   ELEGIR ARCHIVO
+   =============================== */
 
 archivo.addEventListener(
 "change",
@@ -590,7 +568,9 @@ function(){
 });
 
 
-/* DESCARGAR */
+/* ===============================
+   DESCARGAR
+   =============================== */
 
 document
 .getElementById("descargar")
@@ -598,36 +578,35 @@ document
 "click",
 function(){
 
-  salida.toBlob(
-  function(blob){
+  if(!blobResultado) return;
 
-    const url =
-    URL.createObjectURL(blob);
+  const url =
+  URL.createObjectURL(
+    blobResultado
+  );
 
-    const a =
-    document.createElement("a");
+  const a =
+  document.createElement("a");
 
-    a.href = url;
+  a.href = url;
 
-    a.download =
-    "prueba-ximcut.png";
+  a.download =
+  "prueba-ximcut.png";
 
-    a.click();
+  a.click();
 
-    setTimeout(
-      () =>
-      URL.revokeObjectURL(url),
-      1000
-    );
-
-  },
-  "image/png"
+  setTimeout(
+    () =>
+    URL.revokeObjectURL(url),
+    1000
   );
 
 });
 
 
-/* OTRA */
+/* ===============================
+   OTRA
+   =============================== */
 
 document
 .getElementById("otra")
@@ -643,16 +622,11 @@ function(){
 
   archivo.value = "";
 
+  blobResultado = null;
+
 });
 
 </script>
-
-
-<!-- OpenCV.js oficial -->
-<script
-async
-src="https://docs.opencv.org/4.x/opencv.js"
-></script>
 
 </body>
 </html>
