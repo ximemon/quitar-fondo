@@ -5,410 +5,472 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>XimCut</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23e88ba7'/%3E%3Ctext x='50' y='69' text-anchor='middle' font-family='Arial' font-size='58' font-weight='700' fill='white'%3EX%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e88ba7'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='42' fill='white' font-family='Arial'%3EX%3C/text%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#fffafb;color:#302b2e;font-family:Arial,Helvetica,sans-serif}
-main{max-width:850px;margin:auto;padding:50px 20px;text-align:center}
-.logo{font-size:46px;font-weight:800;letter-spacing:-2px}
-.logo span{color:#e88ba7}
-.sub{color:#777;margin:8px 0 32px}
-.card{background:white;border-radius:22px;padding:35px;box-shadow:0 8px 30px #be789116}
-.zona{border:2px dashed #edc6d1;padding:60px 25px}
-.zona.arrastrando{background:#fff5f8;border-color:#e88ba7}
-h2{margin-top:0;font-size:24px}
+body{font:16px Arial;color:#302b2e;background:#fffafb;margin:0}
+main{max-width:850px;margin:auto;padding:48px 20px;text-align:center}
+h1{font-size:48px;margin:0;letter-spacing:-2px}
+h1 span{color:#e88ba7}
 p{color:#777;line-height:1.6}
-button{border:0;border-radius:11px;padding:14px 22px;font-size:15px;font-weight:600;cursor:pointer}
-.rosa{background:#e88ba7;color:white}
-.claro{background:#f7e9ed;color:#8f5366}
-.simple{background:white;border:1px solid #e6d9dd;color:#777}
-button:hover{filter:brightness(.97)}
+.panel{background:white;border-radius:22px;padding:36px;box-shadow:0 8px 30px #be789116}
+#start{border:2px dashed #edc6d1;padding:65px 20px}
+button{border:0;border-radius:10px;background:#e88ba7;color:white;padding:14px 22px;font-weight:bold;cursor:pointer;margin:5px}
+button.secondary{background:#f7e9ed;color:#865064}
 button:disabled{opacity:.5;cursor:wait}
-input[type=text],input[type=password]{width:100%;padding:14px;border:1px solid #e4d5da;border-radius:10px;font-size:16px;outline:none}
-input:focus{border-color:#e88ba7}
-label{display:block;text-align:left;font-size:14px;font-weight:bold;margin-bottom:9px}
-.campo{max-width:440px;margin:22px auto 0}
-.acciones{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:22px}
-#archivo,#procesando,#resultado,#configuracion,#ultimaDescarga{display:none}
-#archivo{display:none!important}
-.checker{max-width:560px;margin:auto;border-radius:14px;overflow:hidden;background-color:white;background-image:linear-gradient(45deg,#f3e7eb 25%,transparent 25%),linear-gradient(-45deg,#f3e7eb 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#f3e7eb 75%),linear-gradient(-45deg,transparent 75%,#f3e7eb 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0}
-#imagenResultado{display:block;max-width:100%;max-height:520px;margin:auto}
-.spinner{height:52px;width:52px;margin:0 auto 20px;border:5px solid #f5dce3;border-top-color:#e88ba7;border-radius:50%;animation:girar .7s linear infinite}
-@keyframes girar{to{transform:rotate(360deg)}}
-.error{color:#b32642;font-size:14px;margin-top:16px;line-height:1.5}
-.muted{font-size:13px;color:#999}
-#ultimaDescarga{max-width:210px;margin:25px auto}
-.ultima{border:1px solid #f0e2e7;border-radius:15px;padding:12px;background:white}
-#ultimaImagen{max-height:115px;max-width:100%;display:block;margin:auto}
-#ultimoCodigo{font-size:13px;font-weight:bold;margin-top:10px;overflow-wrap:anywhere}
-.ultima-preview{height:125px;display:flex;align-items:center;justify-content:center;background:#faf3f5;border-radius:9px}
-.config-link{margin-top:18px;background:transparent;color:#999;padding:8px;font-size:13px}
-#mensajeGlobal{max-width:650px;margin:16px auto}
-@media(max-width:600px){main{padding:30px 15px}.logo{font-size:40px}.card{padding:25px 18px}.zona{padding:45px 18px}}
+input{padding:14px;border:1px solid #edc6d1;border-radius:10px;font-size:16px;width:min(100%,400px)}
+#preview{background:repeating-conic-gradient(#eee 0% 25%,white 0% 50%) 50%/20px 20px;border-radius:12px}
+#out{max-width:100%;max-height:480px;display:block;margin:auto}
+#last img{max-width:130px;max-height:130px}
+#error{color:#a32242;white-space:pre-wrap;overflow-wrap:anywhere}
+[hidden]{display:none!important}
+.spinner{width:45px;height:45px;border:4px solid #f5dce3;border-top-color:#e88ba7;border-radius:50%;margin:0 auto 20px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <main>
-  <div class="logo">Xim<span>Cut</span></div>
-  <div class="sub">Pegá una imagen y obtenela sin fondo.</div>
+<h1>Xim<span>Cut</span></h1>
+<p>Pegá una imagen y obtenela sin fondo.</p>
 
-  <section id="inicio" class="card zona">
-    <div style="font-size:44px;margin-bottom:15px">🖼️</div>
-    <h2>Pegá una imagen</h2>
-    <p>Copiá una imagen y presioná <b>Ctrl + V</b><br>o arrastrala hasta acá.</p>
-    <button class="rosa" id="elegir">Elegir imagen</button>
-    <input type="file" id="archivo" accept="image/png,image/jpeg,image/webp">
-  </section>
+<section id="start" class="panel">
+<h2>Pegá una imagen</h2>
+<p>Ctrl + V o arrastrá una imagen hasta acá.</p>
+<button id="choose">Elegir imagen</button>
+<input type="file" id="file" accept="image/*" hidden>
+</section>
 
-  <section id="configuracion" class="card">
-    <h2>Conectar remove.bg</h2>
-    <p>Pegá tu API Key. Se guardará solamente en este navegador, no en GitHub.</p>
-    <div class="campo">
-      <label for="apiKey">API Key de remove.bg</label>
-      <input id="apiKey" type="password" autocomplete="off" placeholder="Pegá tu clave acá">
-    </div>
-    <div class="acciones">
-      <button id="guardarClave" class="rosa">Guardar clave</button>
-      <button id="cancelarClave" class="simple">Cancelar</button>
-    </div>
-    <p class="muted">Usá esta opción solamente en tu computadora personal.</p>
-  </section>
+<section id="busy" class="panel" hidden>
+<div class="spinner"></div>
+<h2>Eliminando fondo...</h2>
+<p id="status"></p>
+</section>
 
-  <section id="procesando" class="card">
-    <div class="spinner"></div>
-    <h2>Eliminando fondo...</h2>
-    <p>remove.bg está procesando tu imagen.</p>
-    <div id="cronometro" class="muted">0.0 s</div>
-  </section>
+<section id="result" class="panel" hidden>
+<div id="preview"><img id="out" alt="Imagen sin fondo"></div>
+<p id="elapsed"></p>
+<input id="code" placeholder="Código del producto" autocomplete="off">
+<div>
+<button id="copy">Copiar imagen</button>
+<button id="save">Descargar PNG</button>
+<button id="reset" class="secondary">Otra imagen</button>
+</div>
+</section>
 
-  <section id="resultado" class="card">
-    <h2>¡Listo!</h2>
-    <div class="checker">
-      <img id="imagenResultado" alt="Imagen sin fondo">
-    </div>
-    <p id="tiempoFinal" class="muted"></p>
-    <div class="campo">
-      <label for="codigo">Código del producto</label>
-      <input id="codigo" type="text" autocomplete="off" placeholder="Ej. 104483">
-    </div>
-    <div class="acciones">
-      <button id="copiar" class="rosa">Copiar imagen</button>
-      <button id="descargar" class="claro">Descargar PNG</button>
-      <button id="nueva" class="simple">Procesar otra imagen</button>
-    </div>
-    <div id="mensajeError" class="error"></div>
-  </section>
+<p id="error" role="alert"></p>
 
-  <section id="ultimaDescarga">
-    <p class="muted">Última descarga</p>
-    <div class="ultima">
-      <div class="ultima-preview">
-        <img id="ultimaImagen" alt="Última imagen descargada">
-      </div>
-      <div id="ultimoCodigo"></div>
-    </div>
-  </section>
+<button id="folder" class="secondary">Elegir carpeta de destino</button>
+<p id="folderStatus">Destino deseado: H:\Marketing\_Diseño\_Base de Datos</p>
 
-  <div id="mensajeGlobal" class="error"></div>
-  <button id="abrirConfig" class="config-link">⚙ Configurar API Key</button>
+<section id="last" hidden>
+<p>Última descarga</p>
+<img id="thumb" alt="Última descarga">
+<p id="lastName"></p>
+</section>
 </main>
 
-<script>
+<script type="module">
 const $ = id => document.getElementById(id);
-const inicio = $("inicio");
-const configuracion = $("configuracion");
-const procesando = $("procesando");
-const resultado = $("resultado");
-const ultimaDescarga = $("ultimaDescarga");
 
-let blobResultado = null;
-let urlResultado = null;
-let trabajando = false;
-let intervalo = null;
-let ultimaGuardada = null;
+let engine;
+let blob;
+let url;
+let working = false;
+let saving = false;
+let folderHandle = null;
 
-function claveActual(){
-  try {
-    return localStorage.getItem("ximcut_removebg_key") || "";
-  } catch(e) {
-    return "";
+function show(id){
+  for(const x of ['start','busy','result']){
+    $(x).hidden = x !== id;
   }
+  $('last').hidden =
+    id !== 'start' || !$('thumb').getAttribute('src');
 }
 
-function guardarClave(){
-  const clave = $("apiKey").value.trim();
-  if(!clave){
-    alert("Primero pegá tu API Key.");
-    return;
-  }
-  try {
-    localStorage.setItem("ximcut_removebg_key", clave);
-    $("apiKey").value = "";
-    $("mensajeGlobal").textContent = "";
-    reiniciar();
-  } catch(e){
-    alert("Chrome no permitió guardar la clave.");
-  }
+function reset(){
+  if(url) URL.revokeObjectURL(url);
+  url = null;
+  blob = null;
+  $('code').value = '';
+  $('file').value = '';
+  $('out').removeAttribute('src');
+  $('save').textContent = 'Descargar PNG';
+  $('error').textContent = '';
+  show('start');
 }
 
-function mostrarSolo(seccion){
-  [inicio,configuracion,procesando,resultado].forEach(
-    elemento => elemento.style.display = "none"
+async function load(){
+  if(engine) return engine;
+
+  const {pipeline,env} = await import(
+    'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2'
   );
-  seccion.style.display = "block";
-  ultimaDescarga.style.display =
-    seccion === inicio && ultimaGuardada ? "block" : "none";
-}
 
-function mostrarConfiguracion(){
-  $("apiKey").value = "";
-  mostrarSolo(configuracion);
-}
+  env.allowLocalModels = false;
 
-function reiniciar(){
-  blobResultado = null;
-  if(urlResultado){
-    URL.revokeObjectURL(urlResultado);
-    urlResultado = null;
+  const progress_callback = p => {
+    if(p.status === 'progress'){
+      $('status').textContent =
+        'Preparando modelo: ' +
+        Math.round(p.progress || 0) + '%';
+    }
+  };
+
+  try{
+    if(navigator.gpu){
+      engine = await pipeline(
+        'background-removal',
+        'onnx-community/BiRefNet-ONNX',
+        {
+          device:'webgpu',
+          dtype:'fp32',
+          progress_callback
+        }
+      );
+      return engine;
+    }
+  }catch(e){
+    console.warn(e);
   }
-  $("imagenResultado").removeAttribute("src");
-  $("archivo").value = "";
-  $("codigo").value = "";
-  $("descargar").textContent = "Descargar PNG";
-  $("copiar").textContent = "Copiar imagen";
-  $("mensajeError").textContent = "";
-  $("tiempoFinal").textContent = "";
-  if(claveActual()){
-    mostrarSolo(inicio);
-  } else {
-    mostrarConfiguracion();
-  }
-}
 
-function errorServicio(error){
-  if(error instanceof TypeError){
-    return "Chrome no pudo conectarse directamente con remove.bg. Puede ser un bloqueo CORS del navegador. La clave no necesariamente está mal; en ese caso necesitaremos una conexión segura intermedia.";
-  }
-  return error.message || "No se pudo procesar la imagen.";
-}
+  $('status').textContent =
+    'Preparando modo compatible (CPU)...';
 
-async function quitarFondo(file,clave){
-  const datos = new FormData();
-  datos.append("image_file",file,file.name || "imagen.png");
-  datos.append("size","auto");
-  datos.append("format","png");
-
-  const respuesta = await fetch(
-    "https://api.remove.bg/v1.0/removebg",
+  engine = await pipeline(
+    'background-removal',
+    'onnx-community/BiRefNet-ONNX',
     {
-      method:"POST",
-      headers:{"X-Api-Key":clave},
-      body:datos
+      device:'wasm',
+      dtype:'fp32',
+      progress_callback
     }
   );
 
-  if(!respuesta.ok){
-    let mensaje = "Error de remove.bg (" + respuesta.status + ").";
-    try{
-      const json = await respuesta.json();
-      const errores = json.errors || [];
-      if(errores.length){
-        mensaje = errores.map(e=>e.title || e.detail).join(". ");
-      }
-    }catch(e){}
-
-    if(respuesta.status === 401 || respuesta.status === 403){
-      mensaje += " Revisá la API Key y los permisos de tu cuenta.";
-    }
-    if(respuesta.status === 402){
-      mensaje += " Revisá tus créditos disponibles.";
-    }
-    throw new Error(mensaje);
-  }
-
-  const blob = await respuesta.blob();
-  if(!blob.type.includes("image/")){
-    throw new Error("El servicio no devolvió una imagen.");
-  }
-  return blob;
+  return engine;
 }
 
-async function procesarImagen(file){
-  if(!file || !file.type.startsWith("image/") || trabajando) return;
-  if(!claveActual()){
-    mostrarConfiguracion();
-    $("mensajeGlobal").textContent = "Guardá tu API Key antes de procesar.";
-    return;
-  }
+async function process(f){
+  if(!f || working || saving ||
+     !f.type.startsWith('image/')) return;
 
-  trabajando = true;
-  $("mensajeGlobal").textContent = "";
-  mostrarSolo(procesando);
+  working = true;
+  reset();
+  show('busy');
 
-  const comienzo = performance.now();
-  $("cronometro").textContent = "0.0 s";
-  intervalo = setInterval(()=>{
-    $("cronometro").textContent =
-      ((performance.now()-comienzo)/1000).toFixed(1)+" s";
-  },100);
+  $('status').textContent =
+    'Cargando IA. La primera vez puede tardar varios minutos.';
+
+  let src;
+  const t = performance.now();
 
   try{
-    const nuevoBlob = await quitarFondo(file,claveActual());
-    if(urlResultado) URL.revokeObjectURL(urlResultado);
-    blobResultado = nuevoBlob;
-    urlResultado = URL.createObjectURL(nuevoBlob);
-    $("imagenResultado").src = urlResultado;
-    $("tiempoFinal").textContent =
-      "Procesada en "+((performance.now()-comienzo)/1000).toFixed(1)+" s";
-    mostrarSolo(resultado);
-    $("codigo").focus();
-  }catch(error){
-    console.error(error);
-    reiniciar();
-    $("mensajeGlobal").textContent = errorServicio(error);
+    const pipe = await load();
+
+    $('status').textContent = 'Procesando imagen...';
+
+    src = URL.createObjectURL(f);
+
+    const images = await pipe(src);
+    const raw = images[0];
+    const canvas = raw.toCanvas();
+
+    blob = await new Promise((resolve,reject)=>{
+      canvas.toBlob(
+        b => b ? resolve(b) :
+        reject(new Error('No se pudo generar PNG')),
+        'image/png'
+      );
+    });
+
+    url = URL.createObjectURL(blob);
+    $('out').src = url;
+
+    $('elapsed').textContent =
+      ((performance.now()-t)/1000).toFixed(1)+' s';
+
+    show('result');
+    $('code').focus();
+
+  }catch(e){
+    console.error(e);
+    show('start');
+    $('error').textContent =
+      'No se pudo procesar: '+(e.message || String(e));
+
   }finally{
-    clearInterval(intervalo);
-    trabajando = false;
+    if(src) URL.revokeObjectURL(src);
+    working = false;
   }
 }
 
-$("guardarClave").addEventListener("click",guardarClave);
-$("apiKey").addEventListener("keydown",e=>{
-  if(e.key==="Enter") guardarClave();
-});
-$("cancelarClave").addEventListener("click",reiniciar);
-$("abrirConfig").addEventListener("click",mostrarConfiguracion);
+const dbPromise = new Promise((resolve,reject)=>{
+  const r = indexedDB.open('ximcut-destination',1);
 
-$("elegir").addEventListener("click",()=>$("archivo").click());
-$("archivo").addEventListener("change",e=>{
-  if(e.target.files[0]) procesarImagen(e.target.files[0]);
+  r.onupgradeneeded = () =>
+    r.result.createObjectStore('settings');
+
+  r.onsuccess = () => resolve(r.result);
+  r.onerror = () => reject(r.error);
 });
 
-document.addEventListener("paste",e=>{
-  if(trabajando || configuracion.style.display==="block") return;
-  for(const item of e.clipboardData?.items || []){
-    if(item.type.startsWith("image/")){
-      const file = item.getAsFile();
-      if(file){
-        e.preventDefault();
-        procesarImagen(file);
-      }
-      break;
+async function folderStore(value){
+  const db = await dbPromise;
+
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(
+      'settings',
+      value ? 'readwrite' : 'readonly'
+    );
+
+    const store = tx.objectStore('settings');
+
+    const r = value ?
+      store.put(value,'folder') :
+      store.get('folder');
+
+    tx.oncomplete = () => resolve(r.result);
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+
+function showFolder(){
+  if(folderHandle){
+    $('folderStatus').textContent =
+      'Carpeta seleccionada: '+folderHandle.name;
+  }
+}
+
+folderStore().then(h=>{
+  if(!folderHandle){
+    folderHandle = h;
+    showFolder();
+  }
+}).catch(()=>{});
+
+async function chooseFolder(){
+  if(!window.showDirectoryPicker){
+    throw new Error(
+      'Abrí XimCut en Chrome desde GitHub Pages.'
+    );
+  }
+
+  folderHandle = await window.showDirectoryPicker({
+    mode:'readwrite',
+    id:'ximcut-destination'
+  });
+
+  showFolder();
+  folderStore(folderHandle).catch(()=>{});
+
+  return folderHandle;
+}
+
+$('folder').onclick = async()=>{
+  try{
+    await chooseFolder();
+    $('error').textContent = '';
+  }catch(e){
+    if(e.name !== 'AbortError'){
+      $('error').textContent = e.message;
     }
   }
-});
+};
 
-inicio.addEventListener("dragover",e=>{
-  e.preventDefault();
-  inicio.classList.add("arrastrando");
-});
-inicio.addEventListener("dragleave",()=>{
-  inicio.classList.remove("arrastrando");
-});
-inicio.addEventListener("drop",e=>{
-  e.preventDefault();
-  inicio.classList.remove("arrastrando");
-  if(e.dataTransfer.files[0]) procesarImagen(e.dataTransfer.files[0]);
-});
+$('choose').onclick = () => $('file').click();
 
-$("codigo").addEventListener("input",()=>{
-  const valor = $("codigo").value.trim();
-  $("descargar").textContent =
-    valor ? "Descargar "+valor+".png" : "Descargar PNG";
-});
+$('file').onchange = e =>
+  process(e.target.files[0]);
 
-function mostrarUltima(imagen,nombre){
-  ultimaGuardada = {imagen,nombre};
-  $("ultimaImagen").src = imagen;
-  $("ultimoCodigo").textContent = nombre;
-  if(inicio.style.display==="block"){
-    ultimaDescarga.style.display="block";
+document.addEventListener('paste',e=>{
+  const f = [...(e.clipboardData?.items || [])]
+    .find(i=>i.type.startsWith('image/'))
+    ?.getAsFile();
+
+  if(f){
+    e.preventDefault();
+    process(f);
   }
-}
+});
 
-async function guardarMiniatura(blob,nombre){
+$('start').ondragover = e => e.preventDefault();
+
+$('start').ondrop = e=>{
+  e.preventDefault();
+  process(e.dataTransfer.files[0]);
+};
+
+$('reset').onclick = ()=>{
+  if(!saving) reset();
+};
+
+$('code').oninput = ()=>{
+  const c = $('code').value.trim();
+
+  $('save').textContent =
+    c ? 'Descargar '+c+'.png' : 'Descargar PNG';
+};
+
+$('code').onkeydown = e=>{
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    $('save').click();
+  }
+};
+
+$('copy').onclick = async()=>{
+  if(!blob) return;
+
   try{
-    const bitmap = await createImageBitmap(blob);
-    const escala = Math.min(180/bitmap.width,180/bitmap.height,1);
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.max(1,Math.round(bitmap.width*escala));
-    canvas.height = Math.max(1,Math.round(bitmap.height*escala));
-    canvas.getContext("2d").drawImage(bitmap,0,0,canvas.width,canvas.height);
-    bitmap.close();
-    const imagen = canvas.toDataURL("image/webp",.8);
-    mostrarUltima(imagen,nombre);
-    localStorage.setItem("ximcut_ultima_imagen",imagen);
-    localStorage.setItem("ximcut_ultimo_codigo",nombre);
+    await navigator.clipboard.write([
+      new ClipboardItem({'image/png':blob})
+    ]);
+
+    $('copy').textContent = 'Copiada';
+
+    setTimeout(()=>{
+      $('copy').textContent = 'Copiar imagen';
+    },1000);
+
   }catch(e){
-    console.warn("No se guardó la miniatura.",e);
+    $('error').textContent =
+      'No se pudo copiar. Descargá el PNG.';
   }
-}
+};
 
-let descargando = false;
+$('save').onclick = async()=>{
+  if(!blob || saving) return;
 
-async function descargarImagen(){
-  if(!blobResultado || descargando) return;
-  const valor = $("codigo").value.trim();
-  if(!valor){
-    $("mensajeError").textContent = "Ingresá el código del producto.";
-    $("codigo").focus();
+  const c = $('code').value.trim();
+
+  if(!c){
+    $('error').textContent = 'Ingresá el código.';
+    $('code').focus();
     return;
   }
-  $("mensajeError").textContent = "";
-  descargando = true;
 
-  const nombre = valor.replace(/[\\/:*?"<>|]/g,"_")+".png";
-  const blob = blobResultado;
-  const url = URL.createObjectURL(blob);
-  const enlace = document.createElement("a");
-  enlace.href = url;
-  enlace.download = nombre;
-  document.body.appendChild(enlace);
-  enlace.click();
-  enlace.remove();
+  const name =
+    c.replace(/[\\/:*?"<>|]/g,'_')+'.png';
 
-  reiniciar();
-  descargando = false;
+  const b = blob;
 
-  guardarMiniatura(blob,nombre);
-  setTimeout(()=>URL.revokeObjectURL(url),3000);
-}
+  saving = true;
+  $('save').disabled = true;
+  $('error').textContent = '';
 
-$("descargar").addEventListener("click",descargarImagen);
-$("codigo").addEventListener("keydown",e=>{
-  if(e.key==="Enter"){
-    e.preventDefault();
-    descargarImagen();
-  }
-});
-
-$("copiar").addEventListener("click",async()=>{
-  if(!blobResultado) return;
   try{
-    const png = new Blob(
-      [await blobResultado.arrayBuffer()],
-      {type:"image/png"}
-    );
-    await navigator.clipboard.write([
-      new ClipboardItem({"image/png":png})
-    ]);
-    $("copiar").textContent = "✓ Copiada";
-    setTimeout(()=>$("copiar").textContent="Copiar imagen",1200);
-  }catch(e){
-    $("mensajeError").textContent =
-      "Chrome no permitió copiar. Podés descargar el PNG.";
-  }
-});
+    const h = folderHandle || await chooseFolder();
 
-$("nueva").addEventListener("click",reiniciar);
+    if(await h.requestPermission({
+      mode:'readwrite'
+    }) !== 'granted'){
+      throw new Error(
+        'Autorizá el acceso a la carpeta.'
+      );
+    }
+
+    let exists = false;
+
+    try{
+      await h.getFileHandle(name);
+      exists = true;
+    }catch(e){
+      if(e.name !== 'NotFoundError') throw e;
+    }
+
+    if(exists &&
+       !confirm('Ya existe '+name+'. ¿Reemplazarlo?')){
+      return;
+    }
+
+    const f = await h.getFileHandle(
+      name,
+      {create:true}
+    );
+
+    const w = await f.createWritable();
+
+    try{
+      await w.write(b);
+      await w.close();
+    }catch(e){
+      await w.abort().catch(()=>{});
+      throw e;
+    }
+
+    reset();
+
+  }catch(e){
+    $('error').textContent =
+      e.name === 'AbortError' ?
+      'Guardado cancelado.' :
+      'No se pudo guardar: '+e.message;
+
+    return;
+
+  }finally{
+    saving = false;
+    $('save').disabled = false;
+  }
+
+  try{
+    const im = await createImageBitmap(b);
+    const cv = document.createElement('canvas');
+
+    const s = Math.min(
+      140/im.width,
+      140/im.height,
+      1
+    );
+
+    cv.width = Math.max(1,Math.round(im.width*s));
+    cv.height = Math.max(1,Math.round(im.height*s));
+
+    cv.getContext('2d').drawImage(
+      im,0,0,cv.width,cv.height
+    );
+
+    im.close();
+
+    const data = cv.toDataURL();
+
+    $('thumb').src = data;
+    $('lastName').textContent = name;
+
+    localStorage.setItem(
+      'ximcut_ultima_imagen',data
+    );
+
+    localStorage.setItem(
+      'ximcut_ultimo_codigo',name
+    );
+
+    if(!$('start').hidden){
+      $('last').hidden = false;
+    }
+
+  }catch(e){
+    console.warn(e);
+  }
+};
 
 try{
-  const imagen = localStorage.getItem("ximcut_ultima_imagen");
-  const nombre = localStorage.getItem("ximcut_ultimo_codigo");
-  if(imagen && nombre) mostrarUltima(imagen,nombre);
-}catch(e){}
+  const d = localStorage.getItem(
+    'ximcut_ultima_imagen'
+  );
 
-reiniciar();
+  if(d){
+    $('thumb').src = d;
+
+    $('lastName').textContent =
+      localStorage.getItem('ximcut_ultimo_codigo');
+
+    $('last').hidden = false;
+  }
+
+  localStorage.removeItem('ximcut_removebg_key');
+
+}catch(e){}
 </script>
 </body>
 </html>
