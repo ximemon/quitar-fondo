@@ -5,270 +5,504 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>XimCut</title>
+
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e88ba7'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='42' fill='white' font-family='Arial'%3EX%3C/text%3E%3C/svg%3E">
+
 <style>
 *{box-sizing:border-box}
-body{font:16px Arial;color:#302b2e;background:#fffafb;margin:0}
-main{max-width:850px;margin:auto;padding:48px 20px;text-align:center}
-h1{font-size:48px;margin:0;letter-spacing:-2px}
+body{
+  margin:0;
+  background:#fffafb;
+  color:#302b2e;
+  font-family:Arial,Helvetica,sans-serif;
+}
+main{
+  max-width:850px;
+  margin:auto;
+  padding:45px 20px;
+  text-align:center;
+}
+h1{
+  font-size:48px;
+  margin:0;
+  letter-spacing:-2px;
+}
 h1 span{color:#e88ba7}
-p{color:#777;line-height:1.6}
-.panel{background:white;border-radius:22px;padding:36px;box-shadow:0 8px 30px #be789116}
-#start{border:2px dashed #edc6d1;padding:65px 20px}
-button{border:0;border-radius:10px;background:#e88ba7;color:white;padding:14px 22px;font-weight:bold;cursor:pointer;margin:5px}
-button.secondary{background:#f7e9ed;color:#865064}
+p{color:#777;line-height:1.5}
+.panel{
+  background:white;
+  padding:35px;
+  border-radius:22px;
+  box-shadow:0 8px 30px #be789116;
+}
+#inicio{
+  border:2px dashed #edc6d1;
+  padding:65px 20px;
+}
+button{
+  border:0;
+  border-radius:11px;
+  background:#e88ba7;
+  color:white;
+  padding:14px 22px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  margin:5px;
+}
+button:hover{filter:brightness(.96)}
 button:disabled{opacity:.5;cursor:wait}
-input{padding:14px;border:1px solid #edc6d1;border-radius:10px;font-size:16px;width:min(100%,400px)}
-#preview{background:repeating-conic-gradient(#eee 0% 25%,white 0% 50%) 50%/20px 20px;border-radius:12px}
-#out{max-width:100%;max-height:480px;display:block;margin:auto}
-#last img{max-width:130px;max-height:130px}
-#error{color:#a32242;white-space:pre-wrap;overflow-wrap:anywhere}
+.secondary{
+  background:#f7e9ed;
+  color:#865064;
+}
+input{
+  width:min(100%,400px);
+  padding:14px;
+  border:1px solid #edc6d1;
+  border-radius:10px;
+  font-size:16px;
+  outline:none;
+}
+input:focus{border-color:#e88ba7}
+#preview{
+  background:repeating-conic-gradient(
+    #eee 0% 25%,white 0% 50%
+  ) 50%/20px 20px;
+  border-radius:12px;
+  overflow:hidden;
+}
+#imagenResultado{
+  max-width:100%;
+  max-height:490px;
+  display:block;
+  margin:auto;
+}
+#ultimaImagen{
+  max-width:130px;
+  max-height:130px;
+}
+#ultima{
+  margin:25px auto;
+  max-width:200px;
+  background:white;
+  border:1px solid #f0e2e7;
+  border-radius:15px;
+  padding:15px;
+}
+#error{
+  color:#a32242;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+#carpetaEstado{
+  font-size:12px;
+  color:#999;
+}
 [hidden]{display:none!important}
-.spinner{width:45px;height:45px;border:4px solid #f5dce3;border-top-color:#e88ba7;border-radius:50%;margin:0 auto 20px;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{
+  width:48px;
+  height:48px;
+  border:4px solid #f5dce3;
+  border-top-color:#e88ba7;
+  border-radius:50%;
+  margin:0 auto 20px;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+progress{
+  width:min(100%,350px);
+  accent-color:#e88ba7;
+}
 </style>
 </head>
+
 <body>
 <main>
+
 <h1>Xim<span>Cut</span></h1>
 <p>Pegá una imagen y obtenela sin fondo.</p>
 
-<section id="start" class="panel">
-<h2>Pegá una imagen</h2>
-<p>Ctrl + V o arrastrá una imagen hasta acá.</p>
-<button id="choose">Elegir imagen</button>
-<input type="file" id="file" accept="image/*" hidden>
+<section id="inicio" class="panel">
+  <div style="font-size:42px">🖼️</div>
+  <h2>Pegá una imagen</h2>
+  <p>Ctrl + V o arrastrá una imagen hasta acá.</p>
+  <button id="elegir">Elegir imagen</button>
+  <input type="file" id="archivo" accept="image/*" hidden>
 </section>
 
-<section id="busy" class="panel" hidden>
-<div class="spinner"></div>
-<h2>Eliminando fondo...</h2>
-<p id="status"></p>
+<section id="procesando" class="panel" hidden>
+  <div class="spinner"></div>
+  <h2>Eliminando fondo...</h2>
+  <p id="estado">Preparando inteligencia artificial...</p>
+  <progress id="progreso" max="100" hidden></progress>
+  <p id="tiempo"></p>
 </section>
 
-<section id="result" class="panel" hidden>
-<div id="preview"><img id="out" alt="Imagen sin fondo"></div>
-<p id="elapsed"></p>
-<input id="code" placeholder="Código del producto" autocomplete="off">
-<div>
-<button id="copy">Copiar imagen</button>
-<button id="save">Descargar PNG</button>
-<button id="reset" class="secondary">Otra imagen</button>
-</div>
+<section id="resultado" class="panel" hidden>
+  <div id="preview">
+    <img id="imagenResultado" alt="Imagen sin fondo">
+  </div>
+
+  <p id="tiempoFinal"></p>
+
+  <input id="codigo"
+    placeholder="Código del producto"
+    autocomplete="off">
+
+  <div style="margin-top:15px">
+    <button id="copiar">Copiar imagen</button>
+    <button id="guardar">Descargar PNG</button>
+    <button id="otra" class="secondary">Otra imagen</button>
+  </div>
 </section>
 
 <p id="error" role="alert"></p>
 
-<button id="folder" class="secondary">Elegir carpeta de destino</button>
-<p id="folderStatus">Destino deseado: H:\Marketing\_Diseño\_Base de Datos</p>
-
-<section id="last" hidden>
-<p>Última descarga</p>
-<img id="thumb" alt="Última descarga">
-<p id="lastName"></p>
+<section id="ultima" hidden>
+  <p>Última descarga</p>
+  <img id="ultimaImagen" alt="Última descarga">
+  <p id="ultimoNombre"></p>
 </section>
+
+<button id="carpeta" class="secondary">
+  Elegir carpeta de destino
+</button>
+
+<p id="carpetaEstado">
+  H:\Marketing\_Diseño\_Base de Datos
+</p>
+
 </main>
 
 <script type="module">
+
 const $ = id => document.getElementById(id);
 
-let engine;
-let blob;
-let url;
-let working = false;
-let saving = false;
-let folderHandle = null;
+let modelo = null;
+let procesador = null;
+let RawImage = null;
+let cargandoModelo = null;
 
-function show(id){
-  for(const x of ['start','busy','result']){
-    $(x).hidden = x !== id;
+let ocupado = false;
+let guardando = false;
+let resultadoBlob = null;
+let resultadoURL = null;
+let carpetaHandle = null;
+
+function mostrar(id){
+  for(const nombre of [
+    'inicio','procesando','resultado'
+  ]){
+    $(nombre).hidden = nombre !== id;
   }
-  $('last').hidden =
-    id !== 'start' || !$('thumb').getAttribute('src');
+
+  $('ultima').hidden =
+    id !== 'inicio' ||
+    !$('ultimaImagen').getAttribute('src');
 }
 
-function reset(){
-  if(url) URL.revokeObjectURL(url);
-  url = null;
-  blob = null;
-  $('code').value = '';
-  $('file').value = '';
-  $('out').removeAttribute('src');
-  $('save').textContent = 'Descargar PNG';
+function reiniciar(){
+  if(resultadoURL){
+    URL.revokeObjectURL(resultadoURL);
+  }
+
+  resultadoURL = null;
+  resultadoBlob = null;
+
+  $('codigo').value = '';
+  $('archivo').value = '';
+  $('imagenResultado').removeAttribute('src');
+  $('guardar').textContent = 'Descargar PNG';
+  $('copiar').textContent = 'Copiar imagen';
   $('error').textContent = '';
-  show('start');
+
+  mostrar('inicio');
 }
 
-async function load(){
-  if(engine) return engine;
+async function cargarModelo(){
 
-  const {pipeline,env} = await import(
-    'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2'
-  );
+  if(modelo && procesador) return;
 
-  env.allowLocalModels = false;
+  if(cargandoModelo) return cargandoModelo;
 
-  const progress_callback = p => {
-    if(p.status === 'progress'){
-      $('status').textContent =
-        'Preparando modelo: ' +
-        Math.round(p.progress || 0) + '%';
-    }
-  };
+  cargandoModelo = (async()=>{
+
+    $('estado').textContent =
+      'Preparando el modelo. La primera vez puede tardar.';
+
+    const transformers = await import(
+      'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2'
+    );
+
+    const {
+      AutoModel,
+      AutoProcessor,
+      env
+    } = transformers;
+
+    RawImage = transformers.RawImage;
+
+    env.allowLocalModels = false;
+    env.useBrowserCache = true;
+
+    env.backends.onnx.wasm.numThreads = 1;
+    env.backends.onnx.wasm.proxy = false;
+
+    const modelId = 'briaai/RMBG-1.4';
+
+    const progress_callback = p => {
+      if(p.status === 'progress'){
+        $('progreso').hidden = false;
+        $('progreso').value = p.progress || 0;
+
+        $('estado').textContent =
+          'Descargando modelo: ' +
+          Math.round(p.progress || 0) + '%';
+      }
+    };
+
+    procesador = await AutoProcessor.from_pretrained(
+      modelId
+    );
+
+    modelo = await AutoModel.from_pretrained(
+      modelId,
+      {
+        device:'wasm',
+        dtype:'fp32',
+        config:{model_type:'custom'},
+        progress_callback
+      }
+    );
+
+    $('progreso').hidden = true;
+
+  })();
 
   try{
-    if(navigator.gpu){
-      engine = await pipeline(
-        'background-removal',
-        'onnx-community/BiRefNet-ONNX',
-        {
-          device:'webgpu',
-          dtype:'fp32',
-          progress_callback
-        }
-      );
-      return engine;
-    }
+    await cargandoModelo;
   }catch(e){
-    console.warn(e);
+    modelo = null;
+    procesador = null;
+    throw e;
+  }finally{
+    cargandoModelo = null;
   }
-
-  $('status').textContent =
-    'Preparando modo compatible (CPU)...';
-
-  engine = await pipeline(
-    'background-removal',
-    'onnx-community/BiRefNet-ONNX',
-    {
-      device:'wasm',
-      dtype:'fp32',
-      progress_callback
-    }
-  );
-
-  return engine;
 }
 
-async function process(f){
-  if(!f || working || saving ||
-     !f.type.startsWith('image/')) return;
+async function procesar(archivo){
 
-  working = true;
-  reset();
-  show('busy');
+  if(!archivo ||
+     !archivo.type.startsWith('image/') ||
+     ocupado ||
+     guardando) return;
 
-  $('status').textContent =
-    'Cargando IA. La primera vez puede tardar varios minutos.';
+  ocupado = true;
 
-  let src;
-  const t = performance.now();
+  reiniciar();
+  mostrar('procesando');
+
+  const inicio = performance.now();
+
+  const reloj = setInterval(()=>{
+    $('tiempo').textContent =
+      ((performance.now()-inicio)/1000)
+        .toFixed(1)+' s';
+  },100);
+
+  let entradaURL;
 
   try{
-    const pipe = await load();
 
-    $('status').textContent = 'Procesando imagen...';
+    await cargarModelo();
 
-    src = URL.createObjectURL(f);
+    $('estado').textContent =
+      'Detectando los bordes del producto...';
 
-    const images = await pipe(src);
-    const raw = images[0];
-    const canvas = raw.toCanvas();
+    entradaURL = URL.createObjectURL(archivo);
 
-    blob = await new Promise((resolve,reject)=>{
-      canvas.toBlob(
-        b => b ? resolve(b) :
-        reject(new Error('No se pudo generar PNG')),
-        'image/png'
-      );
+    const imagen = await RawImage.fromURL(
+      entradaURL
+    );
+
+    const entradas = await procesador(imagen);
+
+    const salida = await modelo({
+      input:entradas.pixel_values
     });
 
-    url = URL.createObjectURL(blob);
-    $('out').src = url;
+    const tensor = salida.output;
 
-    $('elapsed').textContent =
-      ((performance.now()-t)/1000).toFixed(1)+' s';
+    if(!tensor){
+      throw new Error(
+        'El modelo no devolvió una máscara válida.'
+      );
+    }
 
-    show('result');
-    $('code').focus();
+    const mascara = await RawImage.fromTensor(
+      tensor[0].mul(255).to('uint8')
+    ).resize(imagen.width,imagen.height);
+
+    const canvas = document.createElement('canvas');
+
+    canvas.width = imagen.width;
+    canvas.height = imagen.height;
+
+    const ctx = canvas.getContext('2d');
+
+    const bitmap = await createImageBitmap(archivo);
+
+    ctx.drawImage(bitmap,0,0);
+
+    bitmap.close();
+
+    const pixeles = ctx.getImageData(
+      0,0,canvas.width,canvas.height
+    );
+
+    const canales = mascara.channels || 1;
+
+    for(let i=0;i<canvas.width*canvas.height;i++){
+
+      const alpha = mascara.data[i*canales];
+
+      pixeles.data[i*4+3] = Math.round(
+        pixeles.data[i*4+3] * alpha / 255
+      );
+    }
+
+    ctx.putImageData(pixeles,0,0);
+
+    resultadoBlob = await new Promise(
+      (resolve,reject)=>{
+        canvas.toBlob(
+          b=>b ? resolve(b) :
+            reject(new Error('Error al generar PNG')),
+          'image/png'
+        );
+      }
+    );
+
+    resultadoURL = URL.createObjectURL(
+      resultadoBlob
+    );
+
+    $('imagenResultado').src = resultadoURL;
+
+    $('tiempoFinal').textContent =
+      'Procesada en '+
+      ((performance.now()-inicio)/1000)
+        .toFixed(1)+' s';
+
+    mostrar('resultado');
+
+    $('codigo').focus();
 
   }catch(e){
+
     console.error(e);
-    show('start');
+
+    mostrar('inicio');
+
     $('error').textContent =
-      'No se pudo procesar: '+(e.message || String(e));
+      'Error del modelo RMBG-1.4: '+
+      (e?.message || String(e));
 
   }finally{
-    if(src) URL.revokeObjectURL(src);
-    working = false;
+
+    clearInterval(reloj);
+
+    $('progreso').hidden = true;
+
+    if(entradaURL){
+      URL.revokeObjectURL(entradaURL);
+    }
+
+    ocupado = false;
   }
 }
 
-const dbPromise = new Promise((resolve,reject)=>{
-  const r = indexedDB.open('ximcut-destination',1);
+const dbPromise = new Promise(
+  (resolve,reject)=>{
 
-  r.onupgradeneeded = () =>
-    r.result.createObjectStore('settings');
+    const req = indexedDB.open(
+      'ximcut-carpeta-v2',1
+    );
 
-  r.onsuccess = () => resolve(r.result);
-  r.onerror = () => reject(r.error);
-});
+    req.onupgradeneeded = ()=>{
+      req.result.createObjectStore('datos');
+    };
 
-async function folderStore(value){
+    req.onsuccess = ()=>resolve(req.result);
+
+    req.onerror = ()=>reject(req.error);
+  }
+);
+
+async function almacenarCarpeta(handle){
+
   const db = await dbPromise;
 
   return new Promise((resolve,reject)=>{
+
     const tx = db.transaction(
-      'settings',
-      value ? 'readwrite' : 'readonly'
+      'datos',
+      handle ? 'readwrite' : 'readonly'
     );
 
-    const store = tx.objectStore('settings');
+    const store = tx.objectStore('datos');
 
-    const r = value ?
-      store.put(value,'folder') :
-      store.get('folder');
+    const req = handle ?
+      store.put(handle,'carpeta') :
+      store.get('carpeta');
 
-    tx.oncomplete = () => resolve(r.result);
-    tx.onerror = () => reject(tx.error);
-    tx.onabort = () => reject(tx.error);
+    tx.oncomplete = ()=>resolve(req.result);
+    tx.onerror = ()=>reject(tx.error);
+    tx.onabort = ()=>reject(tx.error);
   });
 }
 
-function showFolder(){
-  if(folderHandle){
-    $('folderStatus').textContent =
-      'Carpeta seleccionada: '+folderHandle.name;
+function mostrarCarpeta(){
+  if(carpetaHandle){
+    $('carpetaEstado').textContent =
+      'Carpeta seleccionada: '+carpetaHandle.name;
   }
 }
 
-folderStore().then(h=>{
-  if(!folderHandle){
-    folderHandle = h;
-    showFolder();
+almacenarCarpeta().then(h=>{
+  if(!carpetaHandle){
+    carpetaHandle = h || null;
+    mostrarCarpeta();
   }
 }).catch(()=>{});
 
-async function chooseFolder(){
+async function elegirCarpeta(){
+
   if(!window.showDirectoryPicker){
     throw new Error(
-      'Abrí XimCut en Chrome desde GitHub Pages.'
+      'Chrome no permite seleccionar carpetas en esta página.'
     );
   }
 
-  folderHandle = await window.showDirectoryPicker({
+  carpetaHandle = await window.showDirectoryPicker({
     mode:'readwrite',
-    id:'ximcut-destination'
+    id:'ximcut-destino'
   });
 
-  showFolder();
-  folderStore(folderHandle).catch(()=>{});
+  mostrarCarpeta();
 
-  return folderHandle;
+  almacenarCarpeta(carpetaHandle).catch(()=>{});
+
+  return carpetaHandle;
 }
 
-$('folder').onclick = async()=>{
+$('carpeta').onclick = async()=>{
+
   try{
-    await chooseFolder();
+    await elegirCarpeta();
     $('error').textContent = '';
   }catch(e){
     if(e.name !== 'AbortError'){
@@ -277,200 +511,259 @@ $('folder').onclick = async()=>{
   }
 };
 
-$('choose').onclick = () => $('file').click();
+$('elegir').onclick = ()=>$('archivo').click();
 
-$('file').onchange = e =>
-  process(e.target.files[0]);
+$('archivo').onchange = e=>{
+  procesar(e.target.files[0]);
+};
 
 document.addEventListener('paste',e=>{
-  const f = [...(e.clipboardData?.items || [])]
-    .find(i=>i.type.startsWith('image/'))
-    ?.getAsFile();
 
-  if(f){
+  const items = Array.from(
+    e.clipboardData?.items || []
+  );
+
+  const imagen = items.find(
+    item=>item.type.startsWith('image/')
+  );
+
+  if(imagen){
     e.preventDefault();
-    process(f);
+    procesar(imagen.getAsFile());
   }
 });
 
-$('start').ondragover = e => e.preventDefault();
-
-$('start').ondrop = e=>{
+$('inicio').ondragover = e=>{
   e.preventDefault();
-  process(e.dataTransfer.files[0]);
+  $('inicio').style.background = '#fff2f6';
 };
 
-$('reset').onclick = ()=>{
-  if(!saving) reset();
+$('inicio').ondragleave = ()=>{
+  $('inicio').style.background = 'white';
 };
 
-$('code').oninput = ()=>{
-  const c = $('code').value.trim();
-
-  $('save').textContent =
-    c ? 'Descargar '+c+'.png' : 'Descargar PNG';
+$('inicio').ondrop = e=>{
+  e.preventDefault();
+  $('inicio').style.background = 'white';
+  procesar(e.dataTransfer.files[0]);
 };
 
-$('code').onkeydown = e=>{
+$('otra').onclick = ()=>{
+  if(!guardando) reiniciar();
+};
+
+$('codigo').oninput = ()=>{
+
+  const codigo = $('codigo').value.trim();
+
+  $('guardar').textContent = codigo ?
+    'Descargar '+codigo+'.png' :
+    'Descargar PNG';
+};
+
+$('codigo').onkeydown = e=>{
+
   if(e.key === 'Enter'){
     e.preventDefault();
-    $('save').click();
+    guardarImagen();
   }
 };
 
-$('copy').onclick = async()=>{
-  if(!blob) return;
+$('copiar').onclick = async()=>{
+
+  if(!resultadoBlob) return;
 
   try{
+
     await navigator.clipboard.write([
-      new ClipboardItem({'image/png':blob})
+      new ClipboardItem({
+        'image/png':resultadoBlob
+      })
     ]);
 
-    $('copy').textContent = 'Copiada';
+    $('copiar').textContent = '✓ Copiada';
 
     setTimeout(()=>{
-      $('copy').textContent = 'Copiar imagen';
-    },1000);
+      $('copiar').textContent = 'Copiar imagen';
+    },1200);
 
   }catch(e){
     $('error').textContent =
-      'No se pudo copiar. Descargá el PNG.';
+      'No se pudo copiar la imagen.';
   }
 };
 
-$('save').onclick = async()=>{
-  if(!blob || saving) return;
-
-  const c = $('code').value.trim();
-
-  if(!c){
-    $('error').textContent = 'Ingresá el código.';
-    $('code').focus();
-    return;
-  }
-
-  const name =
-    c.replace(/[\\/:*?"<>|]/g,'_')+'.png';
-
-  const b = blob;
-
-  saving = true;
-  $('save').disabled = true;
-  $('error').textContent = '';
+async function miniatura(blob,nombre){
 
   try{
-    const h = folderHandle || await chooseFolder();
 
-    if(await h.requestPermission({
-      mode:'readwrite'
-    }) !== 'granted'){
-      throw new Error(
-        'Autorizá el acceso a la carpeta.'
-      );
-    }
+    const imagen = await createImageBitmap(blob);
 
-    let exists = false;
-
-    try{
-      await h.getFileHandle(name);
-      exists = true;
-    }catch(e){
-      if(e.name !== 'NotFoundError') throw e;
-    }
-
-    if(exists &&
-       !confirm('Ya existe '+name+'. ¿Reemplazarlo?')){
-      return;
-    }
-
-    const f = await h.getFileHandle(
-      name,
-      {create:true}
-    );
-
-    const w = await f.createWritable();
-
-    try{
-      await w.write(b);
-      await w.close();
-    }catch(e){
-      await w.abort().catch(()=>{});
-      throw e;
-    }
-
-    reset();
-
-  }catch(e){
-    $('error').textContent =
-      e.name === 'AbortError' ?
-      'Guardado cancelado.' :
-      'No se pudo guardar: '+e.message;
-
-    return;
-
-  }finally{
-    saving = false;
-    $('save').disabled = false;
-  }
-
-  try{
-    const im = await createImageBitmap(b);
-    const cv = document.createElement('canvas');
-
-    const s = Math.min(
-      140/im.width,
-      140/im.height,
+    const escala = Math.min(
+      160/imagen.width,
+      160/imagen.height,
       1
     );
 
-    cv.width = Math.max(1,Math.round(im.width*s));
-    cv.height = Math.max(1,Math.round(im.height*s));
+    const canvas = document.createElement('canvas');
 
-    cv.getContext('2d').drawImage(
-      im,0,0,cv.width,cv.height
+    canvas.width = Math.max(
+      1,Math.round(imagen.width*escala)
     );
 
-    im.close();
+    canvas.height = Math.max(
+      1,Math.round(imagen.height*escala)
+    );
 
-    const data = cv.toDataURL();
+    canvas.getContext('2d').drawImage(
+      imagen,0,0,canvas.width,canvas.height
+    );
 
-    $('thumb').src = data;
-    $('lastName').textContent = name;
+    imagen.close();
+
+    const data = canvas.toDataURL('image/png');
+
+    $('ultimaImagen').src = data;
+    $('ultimoNombre').textContent = nombre;
 
     localStorage.setItem(
       'ximcut_ultima_imagen',data
     );
 
     localStorage.setItem(
-      'ximcut_ultimo_codigo',name
+      'ximcut_ultimo_codigo',nombre
     );
 
-    if(!$('start').hidden){
-      $('last').hidden = false;
+    if(!$('inicio').hidden){
+      $('ultima').hidden = false;
     }
 
   }catch(e){
     console.warn(e);
   }
-};
+}
+
+async function guardarImagen(){
+
+  if(!resultadoBlob || guardando) return;
+
+  const codigo = $('codigo').value.trim();
+
+  if(!codigo){
+    $('error').textContent =
+      'Ingresá el código del producto.';
+
+    $('codigo').focus();
+    return;
+  }
+
+  const nombre = codigo.replace(
+    /[\\/:*?"<>|]/g,'_'
+  )+'.png';
+
+  const blob = resultadoBlob;
+
+  guardando = true;
+
+  $('guardar').disabled = true;
+  $('otra').disabled = true;
+  $('error').textContent = '';
+
+  try{
+
+    const carpeta =
+      carpetaHandle || await elegirCarpeta();
+
+    const permiso = await carpeta.requestPermission({
+      mode:'readwrite'
+    });
+
+    if(permiso !== 'granted'){
+      throw new Error(
+        'Autorizá el acceso a la carpeta de destino.'
+      );
+    }
+
+    let existe = false;
+
+    try{
+
+      await carpeta.getFileHandle(nombre);
+
+      existe = true;
+
+    }catch(e){
+
+      if(e.name !== 'NotFoundError') throw e;
+    }
+
+    if(existe && !confirm(
+      'Ya existe '+nombre+'. ¿Reemplazarlo?'
+    )){
+      return;
+    }
+
+    const archivo = await carpeta.getFileHandle(
+      nombre,{create:true}
+    );
+
+    const escritura = await archivo.createWritable();
+
+    try{
+
+      await escritura.write(blob);
+      await escritura.close();
+
+    }catch(e){
+
+      await escritura.abort().catch(()=>{});
+
+      throw e;
+    }
+
+    await miniatura(blob,nombre);
+
+    reiniciar();
+
+  }catch(e){
+
+    $('error').textContent =
+      e.name === 'AbortError' ?
+      'Guardado cancelado.' :
+      'No se pudo guardar: '+e.message;
+
+  }finally{
+
+    guardando = false;
+
+    $('guardar').disabled = false;
+    $('otra').disabled = false;
+  }
+}
+
+$('guardar').onclick = guardarImagen;
 
 try{
-  const d = localStorage.getItem(
-    'ximcut_ultima_imagen'
-  );
-
-  if(d){
-    $('thumb').src = d;
-
-    $('lastName').textContent =
-      localStorage.getItem('ximcut_ultimo_codigo');
-
-    $('last').hidden = false;
-  }
 
   localStorage.removeItem('ximcut_removebg_key');
 
+  const imagen = localStorage.getItem(
+    'ximcut_ultima_imagen'
+  );
+
+  const nombre = localStorage.getItem(
+    'ximcut_ultimo_codigo'
+  );
+
+  if(imagen && nombre){
+
+    $('ultimaImagen').src = imagen;
+    $('ultimoNombre').textContent = nombre;
+    $('ultima').hidden = false;
+  }
+
 }catch(e){}
+
 </script>
 </body>
 </html>
